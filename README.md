@@ -15,6 +15,6 @@ Add "application.properties" file with the following properties:
 ```
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.datasource.url=jdbc:postgresql:<... URL of your Postgres SQL database ...>
-spring.datasource.username=vwbnmnunwiuopj
-spring.datasource.password=8c06dcbffddd7cf0fd5e73496fea1ec20884885869c13298951f702d610d1a21
+spring.datasource.username=<username>
+spring.datasource.password=<password>
 ```
