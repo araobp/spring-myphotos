@@ -1,4 +1,4 @@
-package araobp.entity;
+package araobp.domain.entity;
 
 import org.springframework.data.annotation.Id;
 
@@ -13,10 +13,9 @@ public class Record {
 
 	@Id
 	private Integer id;
-	
 	private String datetime;
 	private String place;
 	private String memo;
-	private Float latitude;
-	private Float longitude;
+	private Double latitude;
+	private Double longitude;
 }

@@ -1,0 +1,18 @@
+package araobp.domain.service;
+
+import java.util.Optional;
+
+import araobp.domain.entity.Record;
+
+public interface MyPhotosService {
+	
+	Iterable<Record> selectAll();
+	
+	Optional<Record> selectOneById(Integer id);
+	
+	void insert(Record record);
+	
+	void update(Integer id, String memo, String place);
+	
+	void deleteById(Integer id);
+}
