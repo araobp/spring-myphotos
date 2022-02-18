@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link th:href="@{/css/app.css}" rel="stylesheet" type="text/css" />
+<title>Album</title>
+</head>
+<body id="app">
+
+    <h1>Album</h1>
+    
+    <table th:object="${records}">
+        <tr>
+            <th>id</th>
+            <th>datetime</th>
+            <th>place</th>
+            <th>memo</th>
+            <th>map</th>
+        </tr>
+        <tr th:each="r : ${records}" align="center">
+            <td th:text="${r.id}"></td>
+            <td th:text="${r.datetime}"></td>
+            <td th:text="${r.place}"></td>
+            <td th:text="${r.memo}"></td>
+            <td>
+                <a th:href="@{https://www.google.com/maps/search/?api=1&query={lat},{lon}(lat=${r.latitude},lon=${r.longitude})}">map</a>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

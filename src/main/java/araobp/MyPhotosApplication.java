@@ -20,7 +20,8 @@ public class MyPhotosApplication {
 	MyPhotosService service;
 
 	public static void main(String[] args) {
-		SpringApplication.run(MyPhotosApplication.class, args).getBean(MyPhotosApplication.class).test();
+		SpringApplication.run(MyPhotosApplication.class, args);
+		// SpringApplication.run(MyPhotosApplication.class, args).getBean(MyPhotosApplication.class).test();
 	}
 
 	private void test() {

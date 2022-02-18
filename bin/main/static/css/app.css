@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+#app {
+	text-align: center;
+	background: black;
+	color: white;
+}
+
+table {
+	width: 90vw;
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: collapse;
+	border: solid 2px orange;
+	border-collapse: collapse;
+}
+
+table th {
+	border: 0;
+	text-align: center;
+	padding: 0.1em;
+	background: orange;
+	color: white;
+}
+
+table td {
+	border-bottom: dashed 1px orange;
+	border-left: dashed 1px orange;
+	border-right: dashed 1px orange;
+	text-align: left;
+	padding: 0.1em;
+}
+
