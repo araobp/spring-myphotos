@@ -18,3 +18,11 @@ spring.datasource.url=jdbc:postgresql:<... URL of your Postgres SQL database ...
 spring.datasource.username=<username>
 spring.datasource.password=<password>
 ```
+
+## Tips
+
+Table initialization
+```
+=> DELETE FROM record;
+=> SELECT setval('record_id_seq', 1, false);
+```
