@@ -3,7 +3,6 @@ package araobp.controller;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +39,5 @@ public class MyPhotosController {
 		model.addAttribute("records", records);
 
 		return "album.html";
-	}
-
+	}	
 }
