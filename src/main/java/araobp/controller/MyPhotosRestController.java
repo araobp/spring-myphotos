@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,23 @@ public class MyPhotosRestController {
 		}
 		return record;
 	}
-	
+
+	@GetMapping(value = "/photo/{id}/thumbnail", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public byte[] getThumbnail(@PathVariable Integer id) throws ResponseStatusException {
+		byte[] thumbnail = service.selectThumbnailById(id);
+		if (thumbnail == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+		return thumbnail;
+	}
+
+	@GetMapping(value = "/photo/{id}/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public byte[] getImage(@PathVariable Integer id) throws ResponseStatusException {
+		byte[] image = service.selectImageById(id);
+		if (image == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+		return image;
+	}
 
 }

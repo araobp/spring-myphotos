@@ -15,4 +15,8 @@ public interface MyPhotosService {
 	void update(Integer id, String memo, String place);
 	
 	void deleteById(Integer id);
+	
+	byte[] selectThumbnailById(Integer id);
+
+	byte[] selectImageById(Integer id);
 }
