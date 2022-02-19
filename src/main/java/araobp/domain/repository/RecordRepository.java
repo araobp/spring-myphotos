@@ -8,6 +8,9 @@ import araobp.domain.entity.Record;
 
 public interface RecordRepository extends CrudRepository<Record, Integer> {
 
+	@Query("SELECT * FROM record ORDER BY id DESC LIMIT :limit OFFSET :offset")
+	public Iterable<Record> getRecords(@Param("limit") Integer limit, @Param("offset") Integer offset);
+	
 	@Query("UPDATE record SET place = :place, memo = :memo WHERE id = :id")
 	public void updateRecord(@Param("id") Integer id, @Param("place") String place, @Param("memo") String memo);
 }

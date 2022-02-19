@@ -31,6 +31,11 @@ public class MyPhotosServiceImpl implements MyPhotosService {
 	public Optional<Record> selectOneById(Integer id) {
 		return recordRepository.findById(id);
 	}
+	
+	@Override
+	public Iterable<Record> getRecords(Integer limit, Integer offset) {
+		return recordRepository.getRecords(limit, offset);
+	}
 
 	@Override
 	public Integer insert(Record record) {

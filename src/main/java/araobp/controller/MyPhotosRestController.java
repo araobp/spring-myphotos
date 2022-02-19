@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -35,8 +36,8 @@ public class MyPhotosRestController {
 	}
 	
 	@GetMapping("/record")
-	public Iterable<Record> getRecords() {
-		Iterable<Record> records = service.selectAll();
+	public Iterable<Record> getRecords(@RequestParam Integer limit, @RequestParam Integer offset) {
+		Iterable<Record> records = service.getRecords(limit, offset);
 		return records;
 	}
 	

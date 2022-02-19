@@ -8,6 +8,8 @@ public interface MyPhotosService {
 	
 	Iterable<Record> selectAll();
 	
+	Iterable<Record> getRecords(Integer limit, Integer offset);
+	
 	Optional<Record> selectOneById(Integer id);
 	
 	Integer insert(Record record);
