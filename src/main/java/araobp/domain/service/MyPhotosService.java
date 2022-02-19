@@ -10,7 +10,7 @@ public interface MyPhotosService {
 	
 	Optional<Record> selectOneById(Integer id);
 	
-	void insert(Record record);
+	Integer insert(Record record);
 	
 	void update(Integer id, String memo, String place);
 	

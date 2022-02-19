@@ -33,11 +33,12 @@ public class MyPhotosServiceImpl implements MyPhotosService {
 	}
 
 	@Override
-	public void insert(Record record) {
+	public Integer insert(Record record) {
 		record.setId(null);
 		String datetime = Instant.now().toString(); // UTC
 		record.setDatetime(datetime);
-		recordRepository.save(record);
+		Record r = recordRepository.save(record);
+		return r.getId();
 	}
 
 	@Override

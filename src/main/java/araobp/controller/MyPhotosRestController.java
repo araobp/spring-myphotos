@@ -5,11 +5,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import araobp.domain.entity.Id;
 import araobp.domain.entity.Record;
 import araobp.domain.service.MyPhotosService;
 
@@ -18,6 +22,17 @@ public class MyPhotosRestController {
 
 	@Autowired
 	MyPhotosService service;
+	
+	@PostMapping("/record")
+	public Id postRecord(@RequestBody Record record) {
+		Integer id = service.insert(record);
+		return new Id(id);
+	}
+	
+	@DeleteMapping("/record/{id}")
+	public void deleteRecord(@PathVariable Integer id) {
+		service.deleteById(id);
+	}
 	
 	@GetMapping("/record")
 	public Iterable<Record> getRecords() {
