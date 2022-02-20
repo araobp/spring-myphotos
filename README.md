@@ -6,17 +6,86 @@ This is non-SPA/non-PWA version of "myphotos" project. This project uses Thymele
 
 ## Relationship to my other project on GitHub
 
-[react-myphotos(frontend)](https://github.com/araobp/react-myphotos) --- REST API --- [express-myphotos(backend)](https://github.com/araobp/express-myphotos) --- Postgres SQL --- spring-myphotos(classical web app)
+[react-myphotos(frontend)](https://github.com/araobp/react-myphotos) --- REST API --- spring-myphotos(backend)
 
 ## Set up
 
-Add "application.properties" file with the following properties:
+Add "application.properties" file to the project root directory with the following properties:
 
 ```
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.datasource.url=jdbc:postgresql:<... URL of your Postgres SQL database ...>
 spring.datasource.username=<username>
 spring.datasource.password=<password>
+
+araobp.myphotos.username.default=<HTTP basic auth username>
+araobp.myphotos.password.default=<HTTP basic auth password>
+```
+
+## REST API
+
+```
+*** CREATE A RECORD ***
+POST /record
+{
+    "place": "string",
+    "memo": "string",
+    "latitude": "number",
+    "longitude": "number"
+}
+
+Its response
+{
+    "id": "integer"
+}
+
+*** UPDATE A RECORD ***
+PUT /record/:id
+{
+    "place": "string",
+    "memo": "string"
+}
+
+*** GET A LIST OF RECORDS ***
+GET /record?limit={limit}&offset={offset}
+[{"id": "number", 
+  "record":
+    {
+        "datetime": "string",
+        "place": "string",
+        "memo": "string",
+        "latitude": "number",
+        "longitude": "number"
+    }
+}]
+
+*** GET A RECORD ***
+GET /record/:id
+{
+    "datetime: "string",
+    "place": "string",
+    "memo": "string",
+    "latitude": "number",
+    "longitude": "number"
+}
+
+*** PUT AN IMAGE ***
+PUT /photo/:id
+Binary data
+
+*** GET A THUMBNAIL ***
+GET /photo/:id/thumbnail
+Binary data
+
+*** GET AN IMAGE ***
+GET /photo/:id/image
+Binary data
+
+*** DELETE A RECORD ***
+DELETE /record/:id
+
+Its associated photo is also deleted.
+
 ```
 
 ## Tips
