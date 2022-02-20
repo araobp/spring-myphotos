@@ -9,9 +9,11 @@ import araobp.domain.entity.Record;
 
 public interface RecordRepository extends CrudRepository<Record, Integer> {
 
+	@Query("SELECT id FROM record WHERE id = :id")
+	public Iterable<Record> checkIfIdExists(@Param("id") Integer id);
+	
 	@Query("SELECT * FROM record ORDER BY id DESC LIMIT :limit OFFSET :offset")
 	public Iterable<Record> getRecords(@Param("limit") Integer limit, @Param("offset") Integer offset);
-	
 	
 	// [Reference] https://www.baeldung.com/spring-data-jpa-modifying-annotation
 	@Modifying

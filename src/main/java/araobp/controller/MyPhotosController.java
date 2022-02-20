@@ -23,7 +23,7 @@ public class MyPhotosController {
 	@GetMapping("/album")
 	public String showAlbum(@RequestParam Integer limit, @RequestParam Integer offset, Model model) {
 
-		Iterable<Record> records = service.selectAllRecords(limit, offset);
+		Iterable<Record> records = service.selectRecords(limit, offset);
 
 		for (Record r : records) {
 			String utc = r.getDatetime();

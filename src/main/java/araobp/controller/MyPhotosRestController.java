@@ -44,12 +44,12 @@ public class MyPhotosRestController {
 	
 	@DeleteMapping("/record/{id}")
 	public void deleteRecord(@PathVariable Integer id) {
-		service.deleteRecordById(id);
+		service.deleteRecordAndImageById(id);
 	}
 	
 	@GetMapping("/record")
 	public Iterable<Record> getRecords(@RequestParam Integer limit, @RequestParam Integer offset) {
-		Iterable<Record> records = service.selectAllRecords(limit, offset);
+		Iterable<Record> records = service.selectRecords(limit, offset);
 		return records;
 	}
 	
@@ -79,5 +79,11 @@ public class MyPhotosRestController {
 		}
 		return image;
 	}
-
+	
+	@PostMapping("/photo/{id}")
+	public void postImage(@PathVariable Integer id, @RequestBody byte[] image) {
+	    Boolean success = service.insertImage(id, image);
+		logger.info(success);
+		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+	}
 }

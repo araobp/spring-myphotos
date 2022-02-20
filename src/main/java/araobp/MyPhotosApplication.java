@@ -32,7 +32,7 @@ public class MyPhotosApplication {
 		service.insertRecord(record1);
 		service.insertRecord(record2);
 		
-		Iterable<Record> records = service.selectAllRecords(10, 0);
+		Iterable<Record> records = service.selectRecords(10, 0);
 		for (Record r : records) {
 			logger.info(r);
 		}		

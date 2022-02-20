@@ -6,9 +6,9 @@ import araobp.domain.entity.Record;
 
 public interface MyPhotosService {
 	
-	//Iterable<Record> selectAll();
+	Boolean checkIfIdExists(Integer id);
 	
-	Iterable<Record> selectAllRecords(Integer limit, Integer offset);
+	Iterable<Record> selectRecords(Integer limit, Integer offset);
 	
 	Optional<Record> selectRecordById(Integer id);
 	
@@ -16,9 +16,11 @@ public interface MyPhotosService {
 	
 	Boolean updateRecord(Integer id, String place, String memo);
 	
-	void deleteRecordById(Integer id);
+	void deleteRecordAndImageById(Integer id);
 	
 	byte[] selectThumbnailById(Integer id);
 
 	byte[] selectImageById(Integer id);
+	
+	Boolean insertImage(Integer id, byte[] bytes);
 }
