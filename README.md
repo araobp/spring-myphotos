@@ -10,13 +10,16 @@ This is non-SPA/non-PWA version of "myphotos" project. This project uses Thymele
 
 ## Set up
 
-Add "application.properties" file with the following properties:
+Add "application.properties" file to the project root directory with the following properties:
 
 ```
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.datasource.url=jdbc:postgresql:<... URL of your Postgres SQL database ...>
 spring.datasource.username=<username>
 spring.datasource.password=<password>
+
+araobp.myphotos.username.default=<HTTP basic auth username>
+araobp.myphotos.password.default=<HTTP basic auth password>
 ```
 
 ## REST API
