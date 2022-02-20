@@ -24,4 +24,5 @@ public interface PhotoRepository extends CrudRepository<Photo, Integer> {
 			@Param("image") byte[] image,
 			@Param("thumbnail") byte[] thumbnail
 			);
+
 }
