@@ -22,37 +22,40 @@ public class MyPhotosServiceImpl implements MyPhotosService {
 	@Autowired
 	PhotoRepository photoRepository;
 
+	/*
 	@Override
 	public Iterable<Record> selectAll() {
 		return recordRepository.findAll();
 	}
+	*/
 
 	@Override
-	public Optional<Record> selectOneById(Integer id) {
+	public Optional<Record> selectRecordById(Integer id) {
 		return recordRepository.findById(id);
 	}
 	
 	@Override
-	public Iterable<Record> getRecords(Integer limit, Integer offset) {
+	public Iterable<Record> selectAllRecords(Integer limit, Integer offset) {
 		return recordRepository.getRecords(limit, offset);
 	}
 
 	@Override
-	public Integer insert(Record record) {
+	public Integer insertRecord(Record record) {
 		record.setId(null);
 		String datetime = Instant.now().toString(); // UTC
 		record.setDatetime(datetime);
 		Record r = recordRepository.save(record);
 		return r.getId();
 	}
-
+	
 	@Override
-	public void update(Integer id, String place, String memo) {
-		recordRepository.updateRecord(id, place, memo);
+	public Boolean updateRecord(Integer id, String place, String memo) {
+		int affectedRows = recordRepository.updateRecord(id, place, memo);
+		return (affectedRows == 1) ? true: false;
 	}
 
 	@Override
-	public void deleteById(Integer id) {
+	public void deleteRecordById(Integer id) {
 		recordRepository.deleteById(id);
 	}
 

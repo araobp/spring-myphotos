@@ -1,7 +1,5 @@
 package araobp;
 
-import java.util.Optional;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +29,10 @@ public class MyPhotosApplication {
 		Record record2 = new Record(null, null, "Kawasaki", "LAZONA Kawasaki plaza", 35.53275879368219,
 				139.69589252873195);
 
-		service.insert(record1);
-		service.insert(record2);
+		service.insertRecord(record1);
+		service.insertRecord(record2);
 		
-		Iterable<Record> records = service.selectAll();
+		Iterable<Record> records = service.selectAllRecords(10, 0);
 		for (Record r : records) {
 			logger.info(r);
 		}		

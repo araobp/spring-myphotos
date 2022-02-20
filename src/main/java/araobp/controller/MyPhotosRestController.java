@@ -2,6 +2,8 @@ package araobp.controller;
 
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,29 +24,38 @@ import araobp.domain.service.MyPhotosService;
 @RestController
 public class MyPhotosRestController {
 
+	static final Logger logger = LogManager.getLogger(MyPhotosRestController.class);
+
 	@Autowired
 	MyPhotosService service;
 	
 	@PostMapping("/record")
 	public Id postRecord(@RequestBody Record record) {
-		Integer id = service.insert(record);
+		Integer id = service.insertRecord(record);
 		return new Id(id);
+	}
+	
+	@PutMapping("/record/{id}")
+	public void putRecord(@PathVariable Integer id, @RequestBody Record record) {
+		Boolean success = service.updateRecord(id, record.getPlace(), record.getMemo());
+		logger.info(success);
+		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 	}
 	
 	@DeleteMapping("/record/{id}")
 	public void deleteRecord(@PathVariable Integer id) {
-		service.deleteById(id);
+		service.deleteRecordById(id);
 	}
 	
 	@GetMapping("/record")
 	public Iterable<Record> getRecords(@RequestParam Integer limit, @RequestParam Integer offset) {
-		Iterable<Record> records = service.getRecords(limit, offset);
+		Iterable<Record> records = service.selectAllRecords(limit, offset);
 		return records;
 	}
 	
 	@GetMapping("/record/{id}")
 	public Optional<Record> getRecord(@PathVariable Integer id) {
-		Optional<Record> record = service.selectOneById(id);
+		Optional<Record> record = service.selectRecordById(id);
 		if (record.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
