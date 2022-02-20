@@ -6,7 +6,7 @@ This is non-SPA/non-PWA version of "myphotos" project. This project uses Thymele
 
 ## Relationship to my other project on GitHub
 
-[react-myphotos(frontend)](https://github.com/araobp/react-myphotos) --- REST API --- [express-myphotos(backend)](https://github.com/araobp/express-myphotos) --- Postgres SQL --- spring-myphotos(classical web app)
+[react-myphotos(frontend)](https://github.com/araobp/react-myphotos) --- REST API --- spring-myphotos
 
 ## Set up
 
