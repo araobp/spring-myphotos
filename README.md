@@ -97,6 +97,35 @@ Its associated photo is also deleted.
 
 ```
 
+## psql output
+
+```
+DATABASE=> \d record
+                                Table "public.record"
+  Column   |     Type      | Collation | Nullable |               Default               
+-----------+---------------+-----------+----------+-------------------------------------
+ id        | integer       |           | not null | nextval('record_id_seq'::regclass)
+ datetime  | text          |           |          | 
+ place     | text          |           |          | 
+ memo      | text          |           |          | 
+ latitude  | numeric(12,8) |           |          | 
+ longitude | numeric(12,8) |           |          | 
+Indexes:
+    "record_pkey" PRIMARY KEY, btree (id)
+
+DATABASE=> \d photo
+                Table "public.photo"
+  Column   |  Type   | Collation | Nullable | Default 
+-----------+---------+-----------+----------+---------
+ record_id | integer |           | not null | 
+ image     | bytea   |           |          | 
+ thumbnail | bytea   |           |          | 
+Indexes:
+    "photo_pkey" PRIMARY KEY, btree (record_id)
+Foreign-key constraints:
+    "fk_photo_record" FOREIGN KEY (record_id) REFERENCES record(id)
+```
+
 ## Tips
 
 Table initialization
