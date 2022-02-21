@@ -1,6 +1,5 @@
 package araobp.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,18 +9,18 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
- 
-	@Value("${araobp.myphotos.username.default}")
-	private String usernameDefault;
-
-	@Value("${araobp.myphotos.password.default}")
-	private String passwordDefault;
-	
+ 		
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser(usernameDefault)
-                .password("{noop}" + passwordDefault)  // TODO: avoid using {noop}
+    	
+    	String username = System.getenv().get("ARAOBP_USERNAME_DEFAULT");
+    	String password = System.getenv().get("ARAOBP_PASSWORD_DEFAULT");
+    	if (username == null) username = "test";
+    	if (password == null) password = "passw0rd";
+    	
+    	auth.inMemoryAuthentication()
+                .withUser(username)
+                .password("{noop}" + password)  // TODO: avoid using {noop}
                 .roles("USER");
     }
  
