@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import araobp.domain.service.MyPhotosService;
 import araobp.domain.entity.Record;
@@ -17,13 +16,21 @@ import araobp.domain.entity.Record;
 @Controller
 public class MyPhotosController {
 
+	static final Integer LIMIT = 2147483647;
+	static final Integer OFFSET = 0;
+	
 	@Autowired
 	MyPhotosService service;
 
+	@GetMapping("/")
+	public String showIndex(Model model) {
+		return "index";
+	}
+	
 	@GetMapping("/album")
-	public String showAlbum(@RequestParam Integer limit, @RequestParam Integer offset, Model model) {
+	public String showAlbum(Model model) {
 
-		Iterable<Record> records = service.selectRecords(limit, offset);
+		Iterable<Record> records = service.selectRecords(LIMIT, OFFSET);
 
 		for (Record r : records) {
 			String utc = r.getDatetime();
@@ -40,6 +47,6 @@ public class MyPhotosController {
 
 		model.addAttribute("records", records);
 
-		return "album.html";
+		return "album";
 	}
 }

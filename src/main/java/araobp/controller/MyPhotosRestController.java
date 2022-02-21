@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +26,8 @@ public class MyPhotosRestController {
 
 	static final Logger logger = LogManager.getLogger(MyPhotosRestController.class);
 
+	static final String NOT_FOUND_REASON = "ID not found";
+	
 	@Autowired
 	MyPhotosService service;
 	
@@ -40,7 +41,7 @@ public class MyPhotosRestController {
 	public void putRecord(@PathVariable Integer id, @RequestBody Record record) {
 		Boolean success = service.updateRecord(id, record.getPlace(), record.getMemo());
 		logger.info(success);
-		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 	}
 	
 	@DeleteMapping("/record/{id}")
@@ -58,7 +59,7 @@ public class MyPhotosRestController {
 	public Optional<Record> getRecord(@PathVariable Integer id) {
 		Optional<Record> record = service.selectRecordById(id);
 		if (record.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		}
 		return record;
 	}
@@ -67,7 +68,7 @@ public class MyPhotosRestController {
 	public byte[] getThumbnail(@PathVariable Integer id) throws ResponseStatusException {
 		byte[] thumbnail = service.selectThumbnailById(id);
 		if (thumbnail == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		}
 		return thumbnail;
 	}
@@ -76,7 +77,7 @@ public class MyPhotosRestController {
 	public byte[] getImage(@PathVariable Integer id) throws ResponseStatusException {
 		byte[] image = service.selectImageById(id);
 		if (image == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		}
 		return image;
 	}
@@ -85,6 +86,6 @@ public class MyPhotosRestController {
 	public void postImage(@PathVariable Integer id, @RequestBody byte[] image) {
 	    Boolean success = service.insertImage(id, image);
 		logger.info(success);
-		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 	}
 }

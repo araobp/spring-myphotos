@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import araobp.controller.MyPhotosRestController;
 import araobp.domain.entity.Photo;
 import araobp.domain.entity.Record;
 import araobp.domain.repository.PhotoRepository;
@@ -30,8 +29,7 @@ public class MyPhotosServiceImpl implements MyPhotosService {
 
 	static final Logger logger = LogManager.getLogger(MyPhotosServiceImpl.class);
 
-	// TODO: move this to a property file
-	static final Integer targetWidth = 128;
+	static final Integer THUMBNAIL_TARGET_WIDTH = 128;
 
 	@Autowired
 	RecordRepository recordRepository;
@@ -94,10 +92,10 @@ public class MyPhotosServiceImpl implements MyPhotosService {
 				return false;
 			}
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			int targetHeight = originalImage.getHeight() * targetWidth / originalImage.getWidth();
+			int targetHeight = originalImage.getHeight() * THUMBNAIL_TARGET_WIDTH / originalImage.getWidth();
 			try {
 				// Resize image
-				Thumbnails.of(originalImage).size(targetWidth, targetHeight).outputFormat("JPEG").outputQuality(1)
+				Thumbnails.of(originalImage).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG").outputQuality(1)
 						.toOutputStream(outputStream);
 			} catch (IOException e) {
 				e.printStackTrace();
