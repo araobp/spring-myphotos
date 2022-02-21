@@ -22,6 +22,8 @@ araobp.myphotos.username.default=<HTTP basic auth username>
 araobp.myphotos.password.default=<HTTP basic auth password>
 ```
 
+Or follow the following instructions if this app is deployed to Heroku: https://devcenter.heroku.com/articles/deploying-spring-boot-apps-to-heroku
+
 ## REST API
 
 ```
