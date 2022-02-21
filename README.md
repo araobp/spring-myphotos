@@ -10,6 +10,8 @@ This is non-SPA/non-PWA version of "myphotos" project. This project uses Thymele
 
 ## Set up
 
+### Connection to Postgres SQL
+
 Add "application.properties" file to the project root directory with the following properties:
 
 ```
@@ -17,12 +19,17 @@ spring.datasource.driver-class-name=org.postgresql.Driver
 spring.datasource.url=jdbc:postgresql:<... URL of your Postgres SQL database ...>
 spring.datasource.username=<username>
 spring.datasource.password=<password>
-
-araobp.myphotos.username.default=<HTTP basic auth username>
-araobp.myphotos.password.default=<HTTP basic auth password>
 ```
 
 Or follow the following instructions if this app is deployed to Heroku: https://devcenter.heroku.com/articles/deploying-spring-boot-apps-to-heroku
+
+### HTTP Basic auth
+
+Add the following environment variables:
+```
+ARAOBP_MYPHOTOS_USERNAME_DEFAULT
+ARAOBP_MYPHOTOS_PASSWORD_DEFAULT
+```
 
 ## REST API
 
