@@ -113,8 +113,7 @@ DATABASE=> \d record
 Indexes:
     "record_pkey" PRIMARY KEY, btree (id)
 Referenced by:
-    TABLE "photo" CONSTRAINT "fk_photo_record" FOREIGN KEY (record_id) REFERENCES record(id)
-    TABLE "photo" CONSTRAINT "photo_record_id_fkey" FOREIGN KEY (record_id) REFERENCES record(id) ON DELETE CASCADE
+    TABLE "photo" CONSTRAINT "photo_record_fkey" FOREIGN KEY (record_id) REFERENCES record(id) ON DELETE CASCADE
 
 DATABASE=> \d photo
                  Table "public.photo"
@@ -126,8 +125,7 @@ DATABASE=> \d photo
 Indexes:
     "photo_pkey" PRIMARY KEY, btree (record_id)
 Foreign-key constraints:
-    "fk_photo_record" FOREIGN KEY (record_id) REFERENCES record(id)
-    "photo_record_id_fkey" FOREIGN KEY (record_id) REFERENCES record(id) ON DELETE CASCADE
+    "photo_record_fkey" FOREIGN KEY (record_id) REFERENCES record(id) ON DELETE CASCADE
 ```
 
 ## Tips
