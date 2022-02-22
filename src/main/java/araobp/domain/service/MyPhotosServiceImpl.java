@@ -64,7 +64,8 @@ public class MyPhotosServiceImpl implements MyPhotosService {
 
 	@Override
 	public void deleteRecordAndImageById(Integer id) {
-		photoRepository.deleteById(id);
+		// Note: photo is also deleted by "ON DELETE CASCADE" setting on POSTGRES SQL
+		// photoRepository.deleteById(id);
 		recordRepository.deleteById(id);
 	}
 
