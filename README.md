@@ -101,9 +101,9 @@ Its associated photo is also deleted.
 
 ```
 DATABASE=> \d record
-                                Table "public.record"
-  Column   |     Type      | Collation | Nullable |               Default               
------------+---------------+-----------+----------+-------------------------------------
+                                 Table "public.record"
+  Column   |     Type      | Collation | Nullable |              Default               
+-----------+---------------+-----------+----------+------------------------------------
  id        | integer       |           | not null | nextval('record_id_seq'::regclass)
  datetime  | text          |           |          | 
  place     | text          |           |          | 
@@ -112,9 +112,12 @@ DATABASE=> \d record
  longitude | numeric(12,8) |           |          | 
 Indexes:
     "record_pkey" PRIMARY KEY, btree (id)
+Referenced by:
+    TABLE "photo" CONSTRAINT "fk_photo_record" FOREIGN KEY (record_id) REFERENCES record(id)
+    TABLE "photo" CONSTRAINT "photo_record_id_fkey" FOREIGN KEY (record_id) REFERENCES record(id) ON DELETE CASCADE
 
 DATABASE=> \d photo
-                Table "public.photo"
+                 Table "public.photo"
   Column   |  Type   | Collation | Nullable | Default 
 -----------+---------+-----------+----------+---------
  record_id | integer |           | not null | 
@@ -124,6 +127,7 @@ Indexes:
     "photo_pkey" PRIMARY KEY, btree (record_id)
 Foreign-key constraints:
     "fk_photo_record" FOREIGN KEY (record_id) REFERENCES record(id)
+    "photo_record_id_fkey" FOREIGN KEY (record_id) REFERENCES record(id) ON DELETE CASCADE
 ```
 
 ## Tips
