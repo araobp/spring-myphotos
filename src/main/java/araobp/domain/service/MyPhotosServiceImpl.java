@@ -117,4 +117,5 @@ public class MyPhotosServiceImpl implements MyPhotosService {
 		Long count = StreamSupport.stream(records.spliterator(), false).count();
 		return (count == 1) ? true : false;
 	}
+	
 }
