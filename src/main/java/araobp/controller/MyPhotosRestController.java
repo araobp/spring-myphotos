@@ -88,4 +88,24 @@ public class MyPhotosRestController {
 		logger.info(success);
 		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 	}
+	
+	@GetMapping("/management/head")
+	public Id getHeadId() throws ResponseStatusException {
+		Optional<Id> id = service.selectHeadId();
+		if (id.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
+		return id.get();
+	}
+	
+	@GetMapping("/management/tail")
+	public Id getTailId() throws ResponseStatusException {
+		Optional<Id> id = service.selectTailId();
+		if (id.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
+		return id.get();
+	}
+	
+	@GetMapping("/management/count")
+	public long count() throws ResponseStatusException {
+		return service.count();
+	}
+		
 }

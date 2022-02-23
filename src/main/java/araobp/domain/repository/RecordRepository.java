@@ -1,5 +1,7 @@
 package araobp.domain.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -19,4 +21,13 @@ public interface RecordRepository extends CrudRepository<Record, Integer> {
 	@Modifying
 	@Query("UPDATE record SET place = :place, memo = :memo WHERE id = :id")
 	public Integer updateRecord(@Param("id") Integer id, @Param("place") String place, @Param("memo") String memo);
+
+	@Query("SELECT id FROM record ORDER BY id LIMIT 1")
+	public Optional<Record> getHeadId();
+
+	@Query("SELECT id FROM record ORDER BY id DESC LIMIT 1")
+	public Optional<Record> getTailId();
+	
+	@Query("SELECT COUNT(id) FROM record")
+	public long count();
 }

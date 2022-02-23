@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import araobp.domain.entity.Id;
 import araobp.domain.entity.Photo;
 import araobp.domain.entity.Record;
 import araobp.domain.repository.PhotoRepository;
@@ -117,5 +118,31 @@ public class MyPhotosServiceImpl implements MyPhotosService {
 		Long count = StreamSupport.stream(records.spliterator(), false).count();
 		return (count == 1) ? true : false;
 	}
+
+	@Override
+	public Optional<Id> selectHeadId() {
+		Optional<Record> record = recordRepository.getHeadId();
+		Id id = null;
+		if (record.isPresent()) {
+			id = new Id();
+			id.setId(record.get().getId());
+		}
+		return Optional.ofNullable(id);
+	}
 	
+	@Override
+	public Optional<Id> selectTailId() {
+		Optional<Record> record = recordRepository.getTailId();
+		Id id = null;
+		if (record.isPresent()) {
+			id = new Id();
+			id.setId(record.get().getId());
+		}
+		return Optional.ofNullable(id);
+	}
+	
+	@Override
+	public long count() {
+		return recordRepository.count();
+	}
 }

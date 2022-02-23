@@ -2,6 +2,7 @@ package araobp.domain.service;
 
 import java.util.Optional;
 
+import araobp.domain.entity.Id;
 import araobp.domain.entity.Record;
 
 public interface MyPhotosService {
@@ -23,4 +24,10 @@ public interface MyPhotosService {
 	byte[] selectImageById(Integer id);
 	
 	Boolean insertImage(Integer id, byte[] bytes);
+	
+	Optional<Id> selectHeadId();
+	
+	Optional<Id> selectTailId();
+	
+	long count();
 }
