@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import araobp.domain.entity.Record;
-import araobp.domain.service.MyPhotosService;
+import araobp.domain.service.RecordAndPhotoService;
 
 @SpringBootApplication
 public class MyPhotosApplication {
@@ -19,7 +19,7 @@ public class MyPhotosApplication {
 	static final Logger logger = LogManager.getLogger(MyPhotosApplication.class);
 
 	@Autowired
-	MyPhotosService service;
+	RecordAndPhotoService service;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MyPhotosApplication.class, args);

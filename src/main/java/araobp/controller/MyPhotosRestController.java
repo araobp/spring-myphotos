@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import araobp.domain.entity.Count;
+import araobp.domain.entity.GpsLog;
 import araobp.domain.entity.Id;
 import araobp.domain.entity.Record;
-import araobp.domain.service.MyPhotosService;
+import araobp.domain.service.GpsLogService;
+import araobp.domain.service.RecordAndPhotoService;
 
 @RestController
 public class MyPhotosRestController {
@@ -29,35 +32,38 @@ public class MyPhotosRestController {
 	static final String NOT_FOUND_REASON = "ID not found";
 	
 	@Autowired
-	MyPhotosService service;
+	RecordAndPhotoService recordAndPhotoService;
+	
+	@Autowired
+	GpsLogService gpsLogService;
 	
 	@PostMapping("/record")
 	public Id postRecord(@RequestBody Record record) {
-		Integer id = service.insertRecord(record);
+		Integer id = recordAndPhotoService.insertRecord(record);
 		return new Id(id);
 	}
 	
 	@PutMapping("/record/{id}")
 	public void putRecord(@PathVariable Integer id, @RequestBody Record record) {
-		Boolean success = service.updateRecord(id, record.getPlace(), record.getMemo());
+		Boolean success = recordAndPhotoService.updateRecord(id, record.getPlace(), record.getMemo());
 		logger.info(success);
 		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 	}
 	
 	@DeleteMapping("/record/{id}")
 	public void deleteRecord(@PathVariable Integer id) {
-		service.deleteRecordAndImageById(id);
+		recordAndPhotoService.deleteRecordAndImageById(id);
 	}
 	
 	@GetMapping("/record")
 	public Iterable<Record> getRecords(@RequestParam Integer limit, @RequestParam Integer offset) {
-		Iterable<Record> records = service.selectRecords(limit, offset);
+		Iterable<Record> records = recordAndPhotoService.selectRecords(limit, offset);
 		return records;
 	}
 	
 	@GetMapping("/record/{id}")
 	public Optional<Record> getRecord(@PathVariable Integer id) {
-		Optional<Record> record = service.selectRecordById(id);
+		Optional<Record> record = recordAndPhotoService.selectRecordById(id);
 		if (record.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		}
@@ -66,7 +72,7 @@ public class MyPhotosRestController {
 
 	@GetMapping(value = "/photo/{id}/thumbnail", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public byte[] getThumbnail(@PathVariable Integer id) throws ResponseStatusException {
-		byte[] thumbnail = service.selectThumbnailById(id);
+		byte[] thumbnail = recordAndPhotoService.selectThumbnailById(id);
 		if (thumbnail == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		}
@@ -75,7 +81,7 @@ public class MyPhotosRestController {
 
 	@GetMapping(value = "/photo/{id}/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public byte[] getImage(@PathVariable Integer id) throws ResponseStatusException {
-		byte[] image = service.selectImageById(id);
+		byte[] image = recordAndPhotoService.selectImageById(id);
 		if (image == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		}
@@ -84,28 +90,33 @@ public class MyPhotosRestController {
 	
 	@PostMapping("/photo/{id}")
 	public void postImage(@PathVariable Integer id, @RequestBody byte[] image) {
-	    Boolean success = service.insertImage(id, image);
+	    Boolean success = recordAndPhotoService.insertImage(id, image);
 		logger.info(success);
 		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 	}
 	
 	@GetMapping("/management/head")
 	public Id getHeadId() throws ResponseStatusException {
-		Optional<Id> id = service.selectHeadId();
+		Optional<Id> id = recordAndPhotoService.selectHeadId();
 		if (id.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		return id.get();
 	}
 	
 	@GetMapping("/management/tail")
 	public Id getTailId() throws ResponseStatusException {
-		Optional<Id> id = service.selectTailId();
+		Optional<Id> id = recordAndPhotoService.selectTailId();
 		if (id.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		return id.get();
 	}
 	
 	@GetMapping("/management/count")
-	public long count() throws ResponseStatusException {
-		return service.count();
+	public Count count() throws ResponseStatusException {
+		return recordAndPhotoService.count();
 	}
-		
+	
+	@PostMapping("/gpslog")
+	public Id postGpsLog(@RequestBody GpsLog gpsLog) {
+		Integer id = gpsLogService.insertGpsLog(gpsLog);
+		return new Id(id);
+	}		
 }

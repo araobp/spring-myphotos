@@ -2,10 +2,11 @@ package araobp.domain.service;
 
 import java.util.Optional;
 
+import araobp.domain.entity.Count;
 import araobp.domain.entity.Id;
 import araobp.domain.entity.Record;
 
-public interface MyPhotosService {
+public interface RecordAndPhotoService {
 	
 	Boolean checkIfIdExists(Integer id);
 	
@@ -29,5 +30,5 @@ public interface MyPhotosService {
 	
 	Optional<Id> selectTailId();
 	
-	long count();
+	Count count();
 }

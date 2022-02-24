@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import araobp.domain.entity.Count;
 import araobp.domain.entity.Id;
 import araobp.domain.entity.Photo;
 import araobp.domain.entity.Record;
@@ -26,9 +27,9 @@ import net.coobird.thumbnailator.Thumbnails;
 
 @Service
 @Transactional
-public class MyPhotosServiceImpl implements MyPhotosService {
+public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 
-	static final Logger logger = LogManager.getLogger(MyPhotosServiceImpl.class);
+	static final Logger logger = LogManager.getLogger(RecordAndPhotoServiceImpl.class);
 
 	static final Integer THUMBNAIL_TARGET_WIDTH = 128;
 
@@ -142,7 +143,8 @@ public class MyPhotosServiceImpl implements MyPhotosService {
 	}
 	
 	@Override
-	public long count() {
-		return recordRepository.count();
+	public Count count() {
+		long count = recordRepository.count();
+		return new Count(count);
 	}
 }

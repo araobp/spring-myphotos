@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import araobp.domain.service.MyPhotosService;
+import araobp.domain.service.RecordAndPhotoService;
 import araobp.domain.entity.Record;
 
 @Controller
@@ -20,7 +20,7 @@ public class MyPhotosController {
 	static final Integer OFFSET = 0;
 	
 	@Autowired
-	MyPhotosService service;
+	RecordAndPhotoService service;
 
 	@GetMapping("/")
 	public String showIndex(Model model) {
