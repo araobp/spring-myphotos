@@ -127,16 +127,16 @@ Indexes:
 Foreign-key constraints:
     "photo_record_fkey" FOREIGN KEY (record_id) REFERENCES record(id) ON DELETE CASCADE
 
-DATABASE=> \d gps
-                                 Table "public.gps"
-  Column   |     Type      | Collation | Nullable |             Default             
------------+---------------+-----------+----------+---------------------------------
- id        | integer       |           | not null | nextval('gps_id_seq'::regclass)
+DATABASE=> \d gpslog
+                                 Table "public.gpslog"
+  Column   |     Type      | Collation | Nullable |              Default               
+-----------+---------------+-----------+----------+------------------------------------
+ id        | integer       |           | not null | nextval('gpslog_id_seq'::regclass)
  datetime  | text          |           |          | 
  latitude  | numeric(12,8) |           |          | 
  longitude | numeric(12,8) |           |          | 
 Indexes:
-    "gps_pkey" PRIMARY KEY, btree (id)
+    "gpslog_pkey" PRIMARY KEY, btree (id)
 ```
 
 ## Tips
