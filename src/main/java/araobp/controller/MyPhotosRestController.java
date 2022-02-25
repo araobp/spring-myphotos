@@ -95,28 +95,41 @@ public class MyPhotosRestController {
 		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 	}
 	
-	@GetMapping("/management/head")
+	@PostMapping("/gpslog")
+	public Id postGpsLog(@RequestBody GpsLog gpsLog) {
+		Integer id = gpsLogService.insertGpsLog(gpsLog);
+		return new Id(id);
+	}
+	
+	@GetMapping("/gpslog")
+	public Iterable<GpsLog> getGpsLogs(@RequestParam Integer limit, @RequestParam Integer offset) {
+		Iterable<GpsLog> gpsLogs = gpsLogService.selectGpsLogs(limit, offset);
+		return gpsLogs;
+	}
+
+	@GetMapping("/management/record/count")
+	public Count recordCount() throws ResponseStatusException {
+		return recordAndPhotoService.count();
+	}
+
+	@GetMapping("/management/gpslog/count")
+	public Count gpsLogCount() throws ResponseStatusException {
+		return gpsLogService.count();
+	}
+
+	/*
+	@GetMapping("/management/record/head")
 	public Id getHeadId() throws ResponseStatusException {
 		Optional<Id> id = recordAndPhotoService.selectHeadId();
 		if (id.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		return id.get();
 	}
 	
-	@GetMapping("/management/tail")
+	@GetMapping("/management/record/tail")
 	public Id getTailId() throws ResponseStatusException {
 		Optional<Id> id = recordAndPhotoService.selectTailId();
 		if (id.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		return id.get();
 	}
-	
-	@GetMapping("/management/count")
-	public Count count() throws ResponseStatusException {
-		return recordAndPhotoService.count();
-	}
-	
-	@PostMapping("/gpslog")
-	public Id postGpsLog(@RequestBody GpsLog gpsLog) {
-		Integer id = gpsLogService.insertGpsLog(gpsLog);
-		return new Id(id);
-	}		
+	*/
 }

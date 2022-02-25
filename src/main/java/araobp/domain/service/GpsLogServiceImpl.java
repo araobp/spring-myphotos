@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import araobp.domain.entity.Count;
 import araobp.domain.entity.GpsLog;
 import araobp.domain.repository.GpsLogRepository;
 
@@ -24,5 +25,15 @@ public class GpsLogServiceImpl implements GpsLogService {
 		GpsLog g = gpsLogRepository.save(gpsLog);
 		return g.getId();
 	}
-
+	
+	@Override
+	public Iterable<GpsLog> selectGpsLogs(Integer limit, Integer offset) {
+		return gpsLogRepository.getRecords(limit, offset);
+	}
+	
+	@Override
+	public Count count() {
+		long count = gpsLogRepository.count();
+		return new Count(count);
+	}
 }
