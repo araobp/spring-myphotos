@@ -14,7 +14,7 @@ public interface RecordAndPhotoService {
 	
 	Optional<Record> selectRecordById(Integer id);
 	
-	Integer insertRecord(Record record);
+	Id insertRecord(Record record);
 	
 	Boolean updateRecord(Integer id, String place, String memo);
 	

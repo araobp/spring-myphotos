@@ -39,8 +39,7 @@ public class MyPhotosRestController {
 	
 	@PostMapping("/record")
 	public Id postRecord(@RequestBody Record record) {
-		Integer id = recordAndPhotoService.insertRecord(record);
-		return new Id(id);
+		return recordAndPhotoService.insertRecord(record);
 	}
 	
 	@PutMapping("/record/{id}")
@@ -97,16 +96,14 @@ public class MyPhotosRestController {
 	
 	@PostMapping("/gpslog")
 	public Id postGpsLog(@RequestBody GpsLog gpsLog) {
-		Integer id = gpsLogService.insertGpsLog(gpsLog);
-		return new Id(id);
+		return gpsLogService.insertGpsLog(gpsLog);
+	}
+		
+	@GetMapping("/gpslog")
+	public Iterable<GpsLog> getNextSession(@RequestParam Integer current) {
+		return gpsLogService.getNextSession(current);
 	}
 	
-	@GetMapping("/gpslog")
-	public Iterable<GpsLog> getGpsLogs(@RequestParam Integer limit, @RequestParam Integer offset) {
-		Iterable<GpsLog> gpsLogs = gpsLogService.selectGpsLogs(limit, offset);
-		return gpsLogs;
-	}
-
 	@GetMapping("/management/record/count")
 	public Count recordCount() throws ResponseStatusException {
 		return recordAndPhotoService.count();
@@ -114,22 +111,6 @@ public class MyPhotosRestController {
 
 	@GetMapping("/management/gpslog/count")
 	public Count gpsLogCount() throws ResponseStatusException {
-		return gpsLogService.count();
+		return gpsLogService.countSessions();
 	}
-
-	/*
-	@GetMapping("/management/record/head")
-	public Id getHeadId() throws ResponseStatusException {
-		Optional<Id> id = recordAndPhotoService.selectHeadId();
-		if (id.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
-		return id.get();
-	}
-	
-	@GetMapping("/management/record/tail")
-	public Id getTailId() throws ResponseStatusException {
-		Optional<Id> id = recordAndPhotoService.selectTailId();
-		if (id.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
-		return id.get();
-	}
-	*/
 }

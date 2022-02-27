@@ -16,5 +16,6 @@ public class GpsLog {
 	private String datetime;
 	private Double latitude;
 	private Double longitude;
+	private Integer session;
 
 }

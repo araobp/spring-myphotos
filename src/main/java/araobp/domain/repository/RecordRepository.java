@@ -29,5 +29,5 @@ public interface RecordRepository extends CrudRepository<Record, Integer> {
 	public Optional<Record> getTailId();
 	
 	@Query("SELECT COUNT(id) FROM record")
-	public long count();
+	public long count();	
 }

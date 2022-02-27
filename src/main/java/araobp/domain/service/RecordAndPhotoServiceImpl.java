@@ -50,12 +50,12 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	}
 
 	@Override
-	public Integer insertRecord(Record record) {
+	public Id insertRecord(Record record) {
 		record.setId(null);
 		String datetime = Instant.now().toString(); // UTC
 		record.setDatetime(datetime);
 		Record r = recordRepository.save(record);
-		return r.getId();
+		return new Id(r.getId());
 	}
 
 	@Override
@@ -146,5 +146,5 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	public Count count() {
 		long count = recordRepository.count();
 		return new Count(count);
-	}
+	}	
 }

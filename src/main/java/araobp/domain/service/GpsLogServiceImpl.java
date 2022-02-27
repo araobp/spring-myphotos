@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import araobp.domain.entity.Count;
 import araobp.domain.entity.GpsLog;
+import araobp.domain.entity.Id;
 import araobp.domain.repository.GpsLogRepository;
 
 @Service
@@ -18,22 +19,26 @@ public class GpsLogServiceImpl implements GpsLogService {
 	GpsLogRepository gpsLogRepository;
 
 	@Override
-	public Integer insertGpsLog(GpsLog gpsLog) {
+	public Id insertGpsLog(GpsLog gpsLog) {
 		gpsLog.setId(null);
 		String datetime = Instant.now().toString(); // UTC
 		gpsLog.setDatetime(datetime);
 		GpsLog g = gpsLogRepository.save(gpsLog);
-		return g.getId();
+		if (gpsLog.getSession() == null) {
+			g.setSession(g.getId());
+			g = gpsLogRepository.save(gpsLog);
+		}
+		return new Id(g.getId());
 	}
-	
+		
 	@Override
-	public Iterable<GpsLog> selectGpsLogs(Integer limit, Integer offset) {
-		return gpsLogRepository.getRecords(limit, offset);
-	}
-	
-	@Override
-	public Count count() {
+	public Count countSessions() {
 		long count = gpsLogRepository.count();
 		return new Count(count);
+	}
+	
+	@Override
+	public Iterable<GpsLog> getNextSession(Integer current) {
+		return gpsLogRepository.getNextSession(current);
 	}
 }
