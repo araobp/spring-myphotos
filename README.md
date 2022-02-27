@@ -1,9 +1,7 @@
 # spring-myphotos
  
-(Work in progress)
-
-This is non-SPA/non-PWA version of "myphotos" project. This project uses Thymeleaf as a template engine for Spring MVC.
-
+REST API server for [react-myphotos](https://github.com/araobp/react-myphotos)
+ 
 ## Relationship to my other project on GitHub
 
 [react-myphotos(frontend)](https://github.com/araobp/react-myphotos) --- REST API --- spring-myphotos(backend)
