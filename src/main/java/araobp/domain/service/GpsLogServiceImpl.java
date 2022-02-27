@@ -33,7 +33,7 @@ public class GpsLogServiceImpl implements GpsLogService {
 		
 	@Override
 	public Count countSessions() {
-		long count = gpsLogRepository.count();
+		long count = gpsLogRepository.countSessions();
 		return new Count(count);
 	}
 	
