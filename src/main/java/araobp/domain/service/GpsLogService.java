@@ -10,5 +10,7 @@ public interface  GpsLogService {
 	
 	Count countSessions();
 	
-	Iterable<GpsLog> getNextSession(Integer current);
+	Iterable<GpsLog> getPreviousSession(Integer current);
+	
+	Iterable<GpsLog> getNextSession(Integer current);	
 }

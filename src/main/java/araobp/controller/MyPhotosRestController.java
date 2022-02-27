@@ -30,6 +30,9 @@ public class MyPhotosRestController {
 	static final Logger logger = LogManager.getLogger(MyPhotosRestController.class);
 
 	static final String NOT_FOUND_REASON = "ID not found";
+
+	public static final String PREVIOUS = "previous";
+	public static final String NEXT = "next";
 	
 	@Autowired
 	RecordAndPhotoService recordAndPhotoService;
@@ -100,8 +103,14 @@ public class MyPhotosRestController {
 	}
 		
 	@GetMapping("/gpslog")
-	public Iterable<GpsLog> getNextSession(@RequestParam Integer current) {
-		return gpsLogService.getNextSession(current);
+	public Iterable<GpsLog> getSession(@RequestParam Integer current, @RequestParam String direction) {
+		if (direction.equals(PREVIOUS)) {
+			return gpsLogService.getPreviousSession(current);
+		} else if (direction.equals(NEXT)){
+			return gpsLogService.getNextSession(current);			
+		} else {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Illegal direction");
+		}
 	}
 	
 	@GetMapping("/management/record/count")

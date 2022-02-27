@@ -38,6 +38,11 @@ public class GpsLogServiceImpl implements GpsLogService {
 	}
 	
 	@Override
+	public Iterable<GpsLog> getPreviousSession(Integer current) {
+		return gpsLogRepository.getPreviousSession(current);
+	}
+	
+	@Override
 	public Iterable<GpsLog> getNextSession(Integer current) {
 		return gpsLogRepository.getNextSession(current);
 	}
