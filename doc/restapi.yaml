@@ -1,0 +1,293 @@
+openapi: 3.0.1
+info:
+  title: myphotos REST API
+  description: My photos REST API specification.
+  termsOfService: ""
+  contact:
+    email: shiny@example.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://rest.example.com:8080/
+security:
+- basicAuth: []
+tags:
+- name: record
+  description: record CRUD
+- name: photo
+  description: image CRUD
+- name: management
+  description: management API
+paths:
+  /record:
+    get:
+      tags:
+      - record
+      summary: Get a list of records
+      parameters:
+      - name: limit
+        in: query
+        description: limit
+        required: true
+        schema:
+          type: integer
+      - name: offset
+        in: query
+        description: offset
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordList'
+    post:
+      tags:
+      - record
+      summary: Upload a new record
+      operationId: ""
+      requestBody:
+        description: Record to be uploaded
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRecordRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+      x-codegen-request-body-name: body
+  /record/{id}:
+    get:
+      tags:
+      - record
+      summary: Get a list of records
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Record'
+        404:
+          description: ID not found
+          content: {}
+    put:
+      tags:
+      - record
+      summary: Update an existing record
+      operationId: ""
+      parameters:
+      - name: id
+        in: path
+        description: ID of record to be updated
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: Updated record
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecordRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content: {}
+        404:
+          description: ID not found
+          content: {}
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+      - record
+      summary: Delete an existing record
+      parameters:
+      - name: id
+        in: path
+        description: ID of record to be deleted
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: OK
+          content: {}
+        404:
+          description: ID not found
+          content: {}
+  /photo/{id}/image:
+    get:
+      tags:
+      - photo
+      summary: Get an image
+      parameters:
+      - name: id
+        in: path
+        description: ID of image to be updated
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+  /photo/{id}/thumbnail:
+    get:
+      tags:
+      - photo
+      summary: Get a thumbnail
+      parameters:
+      - name: id
+        in: path
+        description: ID of thumbnail to be updated
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+  /photo/{id}:
+    post:
+      tags:
+      - photo
+      summary: Upload an image
+      parameters:
+      - name: id
+        in: path
+        description: ID of image to be uploaded
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: Image to be uploaded
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        200:
+          description: OK
+          content: {}
+  /management/record/count:
+    get:
+      tags:
+      - management
+      summary: Get the number of records
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Count'
+components:
+  schemas:
+    CreateRecordRequest:
+      required:
+      - latitude
+      - longitude
+      - memo
+      - place
+      type: object
+      properties:
+        place:
+          type: string
+          example: Yokohama
+        memo:
+          type: string
+          example: Visiting Landmark Tower now
+        latitude:
+          type: number
+          example: 35.455163705
+        longitude:
+          type: number
+          example: 139.63137517
+    UpdateRecordRequest:
+      required:
+      - memo
+      - place
+      type: object
+      properties:
+        place:
+          type: string
+          example: Yokohama Minatomirai
+        memo:
+          type: string
+          example: Visiting Landmark Tower and Queens Square now
+    RecordList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Record'
+    Record:
+      required:
+      - id
+      - latitude
+      - longitude
+      - memo
+      - place
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 5
+        place:
+          type: string
+          example: Yokohama
+        memo:
+          type: string
+          example: Visiting Landmark Tower now
+        latitude:
+          type: number
+          example: 35.455163705
+        longitude:
+          type: number
+          example: 139.63137517
+    Id:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 5
+    Count:
+      required:
+      - count
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 21
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
