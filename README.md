@@ -1,7 +1,12 @@
 # spring-myphotos
  
 REST API server for [react-myphotos](https://github.com/araobp/react-myphotos)
- 
+
+## REST API specification
+
+[REST API specification in OpenAPI YAML format](./doc/restapi.yaml)
+
+
 ## Relationship to my other project on GitHub
 
 [react-myphotos(frontend)](https://github.com/araobp/react-myphotos) --- REST API --- spring-myphotos(backend)
