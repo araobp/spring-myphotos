@@ -25,7 +25,8 @@ public class MyPhotosApplication {
 		SpringApplication.run(MyPhotosApplication.class, args);
 		// SpringApplication.run(MyPhotosApplication.class, args).getBean(MyPhotosApplication.class).test();
 	}
-		
+
+	/*
 	private void test() {
 		
 
@@ -41,5 +42,6 @@ public class MyPhotosApplication {
 			logger.info(r);
 		}		
 	}
+	*/
 
 }

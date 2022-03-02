@@ -18,4 +18,5 @@ public class Record {
 	private String memo;
 	private Double latitude;
 	private Double longitude;
+	private String address;
 }
