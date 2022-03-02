@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import araobp.domain.entity.Count;
 import araobp.domain.entity.GpsLog;
 import araobp.domain.entity.Id;
+import araobp.domain.entity.PhotoAttribute;
 import araobp.domain.entity.Record;
 import araobp.domain.service.GpsLogService;
 import araobp.domain.service.RecordAndPhotoService;
@@ -70,6 +71,15 @@ public class MyPhotosRestController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		}
 		return record;
+	}
+	
+	@GetMapping("/photo/{id}/attribute")
+	public PhotoAttribute getPhotoAttribute(@PathVariable Integer id) {
+		PhotoAttribute attr = recordAndPhotoService.selectPhotoAttributeById(id);
+		if (attr == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
+		}
+		return attr;
 	}
 
 	@GetMapping(value = "/photo/{id}/thumbnail", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

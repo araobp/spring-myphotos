@@ -24,5 +24,8 @@ public interface PhotoRepository extends CrudRepository<Photo, Integer> {
 			@Param("image") byte[] image,
 			@Param("thumbnail") byte[] thumbnail
 			);
+	
+	@Query("SELECT equirectangular FROM photo WHERE record_id = :id")
+	public Optional<Photo> selectAttributeById(@Param("id") Integer id);
 
 }

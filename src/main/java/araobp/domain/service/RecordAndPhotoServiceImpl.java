@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import araobp.domain.entity.Count;
 import araobp.domain.entity.Id;
 import araobp.domain.entity.Photo;
+import araobp.domain.entity.PhotoAttribute;
 import araobp.domain.entity.Record;
 import araobp.domain.repository.PhotoRepository;
 import araobp.domain.repository.RecordRepository;
@@ -84,6 +85,21 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	}
 
 	@Override
+	public PhotoAttribute selectPhotoAttributeById(Integer id) {
+		PhotoAttribute attr = null;
+		try {
+			Optional<Photo> photo = photoRepository.selectAttributeById(id);
+			if (photo.isPresent()) {
+				attr = new PhotoAttribute();
+				attr.setEquirectangular(photo.get().isEquirectangular());
+			}
+		} catch (Exception e) {
+			logger.warn(e);
+		}
+		return attr;
+	}
+
+	@Override
 	public Boolean insertImage(Integer id, byte[] image) {
 		if (checkIfIdExists(id)) {
 			InputStream inputStream = new ByteArrayInputStream(image);
@@ -98,8 +114,8 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 			int targetHeight = originalImage.getHeight() * THUMBNAIL_TARGET_WIDTH / originalImage.getWidth();
 			try {
 				// Resize image
-				Thumbnails.of(originalImage).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG").outputQuality(1)
-						.toOutputStream(outputStream);
+				Thumbnails.of(originalImage).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG")
+						.outputQuality(1).toOutputStream(outputStream);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
@@ -130,7 +146,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 		}
 		return Optional.ofNullable(id);
 	}
-	
+
 	@Override
 	public Optional<Id> selectTailId() {
 		Optional<Record> record = recordRepository.getTailId();
@@ -141,10 +157,10 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 		}
 		return Optional.ofNullable(id);
 	}
-	
+
 	@Override
 	public Count count() {
 		long count = recordRepository.count();
 		return new Count(count);
-	}	
+	}
 }

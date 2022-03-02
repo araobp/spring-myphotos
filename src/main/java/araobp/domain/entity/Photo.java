@@ -15,4 +15,5 @@ public class Photo {
 	private Integer recordId;
 	private byte[] thumbnail;
 	private byte[] image;
+	private boolean equirectangular;
 }
