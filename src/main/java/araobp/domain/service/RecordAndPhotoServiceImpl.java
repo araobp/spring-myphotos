@@ -24,6 +24,7 @@ import araobp.domain.entity.PhotoAttribute;
 import araobp.domain.entity.Record;
 import araobp.domain.repository.PhotoRepository;
 import araobp.domain.repository.RecordRepository;
+import net.coobird.thumbnailator.ThumbnailParameter;
 import net.coobird.thumbnailator.Thumbnails;
 
 @Service
@@ -118,7 +119,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 				//		.outputQuality(1).toOutputStream(outputStream);
 				// Resize image
 				inputStream.reset();
-				Thumbnails.of(inputStream).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG")
+				Thumbnails.of(inputStream).size(THUMBNAIL_TARGET_WIDTH, targetHeight).useExifOrientation(true).outputFormat("JPEG")
 						.outputQuality(1).toOutputStream(outputStream);
 
 			} catch (IOException e) {
