@@ -114,8 +114,12 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 			int targetHeight = originalImage.getHeight() * THUMBNAIL_TARGET_WIDTH / originalImage.getWidth();
 			try {
 				// Resize image
-				Thumbnails.of(originalImage).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG")
+				//Thumbnails.of(originalImage).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG")
+				//		.outputQuality(1).toOutputStream(outputStream);
+				// Resize image
+				Thumbnails.of(inputStream).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG")
 						.outputQuality(1).toOutputStream(outputStream);
+
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
