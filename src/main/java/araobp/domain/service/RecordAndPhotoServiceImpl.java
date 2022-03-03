@@ -117,6 +117,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 				//Thumbnails.of(originalImage).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG")
 				//		.outputQuality(1).toOutputStream(outputStream);
 				// Resize image
+				inputStream.reset();
 				Thumbnails.of(inputStream).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG")
 						.outputQuality(1).toOutputStream(outputStream);
 
