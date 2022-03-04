@@ -90,8 +90,8 @@ Indexes:
 Use an instance of ByteArrayInputStream as an input of Thumbnails.of():
 
 ```
-			 InputStream inputStream = new ByteArrayInputStream(image);
-				Thumbnails.of(inputStream).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG")
-						.outputQuality(1).toOutputStream(outputStream);
+InputStream inputStream = new ByteArrayInputStream(image);
+Thumbnails.of(inputStream).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG")
+    .outputQuality(1).toOutputStream(outputStream);
 ```
 
