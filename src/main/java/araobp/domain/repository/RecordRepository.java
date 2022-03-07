@@ -27,6 +27,10 @@ public interface RecordRepository extends CrudRepository<Record, Integer> {
 	public Integer updateDatetime(@Param("id") Integer id, @Param("datetime") String datetime);
 	
 	@Modifying
+	@Query("UPDATE record SET address = :address WHERE id = :id")
+	public Integer updateAddress(@Param("id") Integer id, @Param("address") String address);
+
+	@Modifying
 	@Query("UPDATE record SET latitude = :latitude, longitude = :longitude WHERE id = :id")
 	public Integer updateLatLon(@Param("id") Integer id, @Param("latitude") double latitude, @Param("longitude") double longitude);
 	

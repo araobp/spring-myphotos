@@ -33,6 +33,7 @@ import araobp.domain.entity.PhotoAttribute;
 import araobp.domain.entity.Record;
 import araobp.domain.repository.PhotoRepository;
 import araobp.domain.repository.RecordRepository;
+import araobp.nominatim.Nominatim;
 import net.coobird.thumbnailator.Thumbnails;
 
 @Service
@@ -57,6 +58,9 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 
 	@Autowired
 	PhotoRepository photoRepository;
+
+	@Autowired
+	Nominatim nominatim;
 
 	@Override
 	public Optional<Record> selectRecordById(Integer id) {
@@ -146,19 +150,27 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 						}
 					}
 				}
+				
+				// Try to get geo location from the image
+				String address = "";
+				GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
+				if (gpsDirectory != null) {
+					GeoLocation geoLocation = gpsDirectory.getGeoLocation();
+					Double latitude = geoLocation.getLatitude();
+					Double longitude = geoLocation.getLongitude();
+					recordRepository.updateLatLon(id, latitude, longitude);
+					address = nominatim.getAddress(latitude, longitude);
+					recordRepository.updateAddress(id, address);
+				}
 
 				// Try to get datetime from the image
 				ExifSubIFDDirectory exifSubIfdDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
-				Date date = null;
-				System.out.println(exifSubIfdDirectory);
 				if (exifSubIfdDirectory != null) {
-					date = exifSubIfdDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+					Date date = exifSubIfdDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
 					Instant instant = date.toInstant();
 					instant = instant.minus(UTC_OFFSET, ChronoUnit.HOURS); // EXIF datetime does not take time zone into account
 					String datetime = instant.toString();
-					logger.debug(datetime);
-					Integer affectedRows = recordRepository.updateDatetime(id, datetime);
-					logger.debug(affectedRows);
+					recordRepository.updateDatetime(id, datetime);
 				}
 
 				// Resize image
@@ -170,17 +182,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 				// Insert the image data to photo table
 				byte[] thumbnail = outputStream.toByteArray();
 				Integer affectedRows = photoRepository.insertImageAndThumbnail(id, image, thumbnail, equirectangular);
-
-				// Try to get geo location from the image
-				GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
-				if (gpsDirectory != null) {
-					GeoLocation geoLocation = gpsDirectory.getGeoLocation();
-					Double latitude = geoLocation.getLatitude();
-					Double longitude = geoLocation.getLongitude();
-					Integer affectedRows2 = recordRepository.updateLatLon(id, latitude, longitude);
-					logger.debug(affectedRows2);
-				}
-
+				
 				return (affectedRows == 1) ? true : false;
 			} catch (Exception e) {
 				e.printStackTrace();
