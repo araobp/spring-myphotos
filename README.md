@@ -79,8 +79,19 @@ Indexes:
 
 ## Tips
 
-Table initialization
+### Postgres SQL table initialization
 ```
 => DELETE FROM record;
 => SELECT setval('record_id_seq', 1, false);
 ```
+
+### Resizing image preserving EXIF orientation by Thumnailator
+
+Use an instance of ByteArrayInputStream as an input of Thumbnails.of():
+
+```
+InputStream inputStream = new ByteArrayInputStream(image);
+Thumbnails.of(inputStream).size(THUMBNAIL_TARGET_WIDTH, targetHeight).outputFormat("JPEG")
+    .outputQuality(1).toOutputStream(outputStream);
+```
+
