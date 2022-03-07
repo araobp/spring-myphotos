@@ -8,9 +8,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,13 +42,14 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	static final Logger logger = LogManager.getLogger(RecordAndPhotoServiceImpl.class);
 
 	static final Integer THUMBNAIL_TARGET_WIDTH = 128;
-	
-	static final Integer UTC_OFFSET;
 
-	static  {
+	static final Integer UTC_OFFSET = getUtcOffset();
+
+	static Integer getUtcOffset() {
 		String utcOffset = System.getenv().get("UTC_OFFSET");
-		if (utcOffset == null) utcOffset = "9";
-		UTC_OFFSET = Integer.parseInt(utcOffset);
+		if (utcOffset == null)
+			utcOffset = "9";
+		return Integer.parseInt(utcOffset);
 	}
 
 	@Autowired
@@ -131,28 +132,29 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 				Integer width = jpegDirectory.getInteger(JpegDirectory.TAG_IMAGE_WIDTH);
 				int targetHeight = height * THUMBNAIL_TARGET_WIDTH / width;
 
-	            // Check if this image is equirectangular
-	            boolean equirectangular = false;	            
-		        for (XmpDirectory xmpDirectory : metadata.getDirectoriesOfType(XmpDirectory.class)) {
-		            XMPMeta xmpMeta = xmpDirectory.getXMPMeta();
-		            XMPIterator itr = xmpMeta.iterator();
+				// Check if this image is equirectangular
+				boolean equirectangular = false;
+				for (XmpDirectory xmpDirectory : metadata.getDirectoriesOfType(XmpDirectory.class)) {
+					XMPMeta xmpMeta = xmpDirectory.getXMPMeta();
+					XMPIterator itr = xmpMeta.iterator();
 
-		            while (itr.hasNext()) {
-		                XMPPropertyInfo property = (XMPPropertyInfo) itr.next();
-		                String path = property.getPath();
-		                if (path != null && property.getPath().equals("GPano:ProjectionType")) {
-		                	equirectangular = true;
-		                }
-		            }
-		        }
+					while (itr.hasNext()) {
+						XMPPropertyInfo property = (XMPPropertyInfo) itr.next();
+						String path = property.getPath();
+						if (path != null && property.getPath().equals("GPano:ProjectionType")) {
+							equirectangular = true;
+						}
+					}
+				}
 
-		        // Try to get datetime from the image
+				// Try to get datetime from the image
 				ExifSubIFDDirectory exifSubIfdDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
 				Date date = null;
+				System.out.println(exifSubIfdDirectory);
 				if (exifSubIfdDirectory != null) {
 					date = exifSubIfdDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
 					Instant instant = date.toInstant();
-					instant.minus(UTC_OFFSET, ChronoUnit.HOURS);  // EXIF datetime does not take time zone into account
+					instant = instant.minus(UTC_OFFSET, ChronoUnit.HOURS); // EXIF datetime does not take time zone into account
 					String datetime = instant.toString();
 					logger.debug(datetime);
 					Integer affectedRows = recordRepository.updateDatetime(id, datetime);
@@ -168,7 +170,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 				// Insert the image data to photo table
 				byte[] thumbnail = outputStream.toByteArray();
 				Integer affectedRows = photoRepository.insertImageAndThumbnail(id, image, thumbnail, equirectangular);
-				
+
 				// Try to get geo location from the image
 				GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
 				if (gpsDirectory != null) {
@@ -178,8 +180,8 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 					Integer affectedRows2 = recordRepository.updateLatLon(id, latitude, longitude);
 					logger.debug(affectedRows2);
 				}
-				
-		        return (affectedRows == 1) ? true : false;
+
+				return (affectedRows == 1) ? true : false;
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;
@@ -192,7 +194,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	@Override
 	public Boolean checkIfIdExists(Integer id) {
 		Iterable<Record> records = recordRepository.checkIfIdExists(id);
-		//logger.info(records);
+		// logger.info(records);
 		Long count = StreamSupport.stream(records.spliterator(), false).count();
 		return (count == 1) ? true : false;
 	}

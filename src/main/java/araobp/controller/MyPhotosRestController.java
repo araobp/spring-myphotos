@@ -49,7 +49,6 @@ public class MyPhotosRestController {
 	@PutMapping("/record/{id}")
 	public void putRecord(@PathVariable Integer id, @RequestBody Record record) {
 		Boolean success = recordAndPhotoService.updateRecord(id, record.getPlace(), record.getMemo());
-		logger.info(success);
 		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 	}
 	
@@ -103,7 +102,6 @@ public class MyPhotosRestController {
 	@PostMapping("/photo/{id}")
 	public void postImage(@PathVariable Integer id, @RequestBody byte[] image) {
 	    Boolean success = recordAndPhotoService.insertImage(id, image);
-		logger.info(success);
 		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 	}
 	

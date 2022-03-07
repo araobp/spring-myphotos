@@ -23,25 +23,5 @@ public class MyPhotosApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MyPhotosApplication.class, args);
-		// SpringApplication.run(MyPhotosApplication.class, args).getBean(MyPhotosApplication.class).test();
 	}
-
-	/*
-	private void test() {
-		
-
-		Record record1 = new Record(null, null, "Yokohama", "Landmark tower", 35.45517244565901, 139.63140199972472);
-		Record record2 = new Record(null, null, "Kawasaki", "LAZONA Kawasaki plaza", 35.53275879368219,
-				139.69589252873195);
-
-		service.insertRecord(record1);
-		service.insertRecord(record2);
-		
-		Iterable<Record> records = service.selectRecords(10, 0);
-		for (Record r : records) {
-			logger.info(r);
-		}		
-	}
-	*/
-
 }
