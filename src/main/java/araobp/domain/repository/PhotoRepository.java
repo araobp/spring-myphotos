@@ -17,12 +17,13 @@ public interface PhotoRepository extends CrudRepository<Photo, Integer> {
 	@Query("SELECT image FROM photo WHERE record_id = :id")
 	public Optional<Photo> selectImageById(@Param("id") Integer id);
 
-	@Query("INSERT INTO photo (record_id, image, thumbnail) VALUES (:id, :image, :thumbnail)")
 	@Modifying
+	@Query("INSERT INTO photo (record_id, image, thumbnail, equirectangular) VALUES (:id, :image, :thumbnail, :equirectangular)")
 	public Integer insertImageAndThumbnail(
 			@Param("id") Integer id,
 			@Param("image") byte[] image,
-			@Param("thumbnail") byte[] thumbnail
+			@Param("thumbnail") byte[] thumbnail,
+			@Param("equirectangular") boolean equirectangular
 			);
 	
 	@Query("SELECT equirectangular FROM photo WHERE record_id = :id")
