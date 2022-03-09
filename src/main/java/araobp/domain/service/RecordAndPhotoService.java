@@ -6,12 +6,15 @@ import araobp.domain.entity.Count;
 import araobp.domain.entity.Id;
 import araobp.domain.entity.PhotoAttribute;
 import araobp.domain.entity.Record;
+import araobp.domain.entity.RecordEveryNth;
 
 public interface RecordAndPhotoService {
 	
 	Boolean checkIfIdExists(Integer id);
 	
 	Iterable<Record> selectRecords(Integer limit, Integer offset);
+	
+	Iterable<RecordEveryNth> selectRecordsEveryNth(Integer limit);
 	
 	Optional<Record> selectRecordById(Integer id);
 	

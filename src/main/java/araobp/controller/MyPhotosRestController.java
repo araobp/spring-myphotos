@@ -22,6 +22,7 @@ import araobp.domain.entity.GpsLog;
 import araobp.domain.entity.Id;
 import araobp.domain.entity.PhotoAttribute;
 import araobp.domain.entity.Record;
+import araobp.domain.entity.RecordEveryNth;
 import araobp.domain.service.GpsLogService;
 import araobp.domain.service.RecordAndPhotoService;
 
@@ -62,7 +63,7 @@ public class MyPhotosRestController {
 		Iterable<Record> records = recordAndPhotoService.selectRecords(limit, offset);
 		return records;
 	}
-	
+		
 	@GetMapping("/record/{id}")
 	public Optional<Record> getRecord(@PathVariable Integer id) {
 		Optional<Record> record = recordAndPhotoService.selectRecordById(id);
@@ -124,6 +125,11 @@ public class MyPhotosRestController {
 	@GetMapping("/management/record/count")
 	public Count recordCount() throws ResponseStatusException {
 		return recordAndPhotoService.count();
+	}
+	
+	@GetMapping("/management/record/everynth")
+	public Iterable<RecordEveryNth> getRecordsEveryNth(@RequestParam Integer limit) {
+		return recordAndPhotoService.selectRecordsEveryNth(limit);
 	}
 
 	@GetMapping("/management/gpslog/count")

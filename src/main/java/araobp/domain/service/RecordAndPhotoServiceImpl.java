@@ -31,6 +31,7 @@ import araobp.domain.entity.Id;
 import araobp.domain.entity.Photo;
 import araobp.domain.entity.PhotoAttribute;
 import araobp.domain.entity.Record;
+import araobp.domain.entity.RecordEveryNth;
 import araobp.domain.repository.PhotoRepository;
 import araobp.domain.repository.RecordRepository;
 import araobp.nominatim.Nominatim;
@@ -70,6 +71,11 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	@Override
 	public Iterable<Record> selectRecords(Integer limit, Integer offset) {
 		return recordRepository.getRecords(limit, offset);
+	}
+	
+	@Override
+	public Iterable<RecordEveryNth> selectRecordsEveryNth(Integer limit) {
+		return recordRepository.getRecordsEveryNth(limit);
 	}
 
 	@Override
