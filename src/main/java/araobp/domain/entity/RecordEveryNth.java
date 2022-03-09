@@ -15,5 +15,4 @@ public class RecordEveryNth {
 	private Integer id;
 	private String datetime;
 	private String place;
-	private Integer rowNumber;
 }
