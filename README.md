@@ -13,13 +13,13 @@ REST API server for [react-myphotos](https://github.com/araobp/react-myphotos)
 
 ## Set up
 
-### Connection to Postgres SQL
+### Connection to PostgreSQL
 
 Add "application.properties" file to the project root directory with the following properties:
 
 ```
 spring.datasource.driver-class-name=org.postgresql.Driver
-spring.datasource.url=jdbc:postgresql:<... URL of your Postgres SQL database ...>
+spring.datasource.url=jdbc:postgresql:<... URL of your PostgreSQL database ...>
 spring.datasource.username=<username>
 spring.datasource.password=<password>
 ```
@@ -79,7 +79,7 @@ Indexes:
 
 ## Tips
 
-### Postgres SQL table initialization
+### PostgreSQL table initialization
 ```
 => DELETE FROM record;
 => SELECT setval('record_id_seq', 1, false);
