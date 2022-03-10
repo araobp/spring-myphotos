@@ -4,13 +4,14 @@ info:
   description: My photos REST API specification.
   termsOfService: ""
   contact:
-    email: shiny@example.com
+    email: anonymous@example.com
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
 servers:
-- url: https://rest.example.com:8080/
+- url: http://localhost:8080/
+- url: https://localhost:8080/
 security:
 - basicAuth: []
 tags:
@@ -173,6 +174,25 @@ paths:
               schema:
                 type: string
                 format: binary
+  /photo/{id}/attribute:
+    get:
+      tags:
+      - photo
+      summary: Get an attribute
+      parameters:
+      - name: id
+        in: path
+        description: ID of photo
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoAttribute'
   /photo/{id}:
     post:
       tags:
@@ -209,6 +229,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Count'
+  /management/record/everynth:
+    get:
+      tags:
+      - management
+      summary: Get records every Nth
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordEveryNthList'
 components:
   schemas:
     CreateRecordRequest:
@@ -217,6 +249,7 @@ components:
       - longitude
       - memo
       - place
+      - address
       type: object
       properties:
         place:
@@ -231,6 +264,9 @@ components:
         longitude:
           type: number
           example: 139.63137517
+        address:
+          type: string
+          example: 'Kanagawa Yokohama Nishi-ku Minatomirai 2-chome 2-1'
     UpdateRecordRequest:
       required:
       - memo
@@ -250,15 +286,20 @@ components:
     Record:
       required:
       - id
-      - latitude
-      - longitude
+      - datetime
       - memo
       - place
+      - latitude
+      - longitude
+      - address
       type: object
       properties:
         id:
           type: integer
           example: 5
+        datetime:
+          type: string
+          example: '2022-02-14T06:33:48.335Z'
         place:
           type: string
           example: Yokohama
@@ -271,6 +312,29 @@ components:
         longitude:
           type: number
           example: 139.63137517
+        address:
+          type: string
+          example: 'Kanagawa Yokohama Nishi-ku Minatomirai 2-chome 2-1'
+    RecordEveryNthList:
+      type: array
+      items:
+        $ref: '#/components/schemas/RecordEveryNth'
+    RecordEveryNth:
+      required:
+      - id
+      - datetime
+      - place
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 5
+        datetime:
+          type: string
+          example: '2022-02-14T06:33:48.335Z'
+        place:
+          type: string
+          example: Yokohama
     Id:
       required:
       - id
@@ -287,6 +351,14 @@ components:
         count:
           type: integer
           example: 21
+    PhotoAttribute:
+      required:
+      - equirectangular
+      type: object
+      properties:
+        equirectangular:
+          type: boolean
+          example: true
   securitySchemes:
     basicAuth:
       type: http
