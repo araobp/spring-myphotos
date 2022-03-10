@@ -79,7 +79,7 @@ Indexes:
 
 ## Tips
 
-### Postgres SQL table initialization
+### PostgreSQL table initialization
 ```
 => DELETE FROM record;
 => SELECT setval('record_id_seq', 1, false);
