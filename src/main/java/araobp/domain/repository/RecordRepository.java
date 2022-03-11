@@ -19,8 +19,14 @@ public interface RecordRepository extends CrudRepository<Record, Integer> {
 	@Query("SELECT * FROM record ORDER BY timestamp DESC LIMIT :limit OFFSET :offset")
 	public Iterable<Record> getRecords(@Param("limit") Integer limit, @Param("offset") Integer offset);
 	
-	@Query("SELECT t.* FROM (SELECT id, timestamp, place, row_number() OVER (ORDER BY timestamp DESC) AS ROW FROM record) t WHERE t.row % :limit = 1")
+	@Query("SELECT *, ( 6371 * ACOS( COS( RADIANS( :latitude ) ) * COS( RADIANS( latitude ) ) * COS( RADIANS( longitude ) - RADIANS( :longitude) ) + SIN( RADIANS( :latitude ) ) * SIN( RADIANS( latitude ) ) ) ) AS distance FROM record ORDER BY distance LIMIT :limit OFFSET :offset")
+	public Iterable<Record> getRecordsClosestOrder(@Param("latitude") Double latitude, @Param("longitude") Double longitude, @Param("limit") Integer limit, @Param("offset") Integer offset);
+	
+	@Query("SELECT * FROM (SELECT id, timestamp, place, row_number() OVER (ORDER BY timestamp DESC) AS ROW FROM record) t WHERE t.row % :limit = 1")
 	public Iterable<RecordEveryNth> getRecordsEveryNth(@Param("limit") Integer limit);
+	
+	@Query("SELECT * FROM ( SELECT *, row_number() OVER (ORDER BY distance) AS row FROM ( SELECT  *, ( 6371 * ACOS( COS( RADIANS( :latitude ) ) * COS( RADIANS( latitude ) ) * COS( RADIANS( longitude ) - RADIANS( :longitude ) ) + SIN( RADIANS( :latitude) ) * SIN( RADIANS( latitude ) ) ) ) AS distance FROM record ) withDistance ) withRow WHERE row % :limit = 1")
+	public Iterable<RecordEveryNth> getRecordsEveryNthClosestOrder(@Param("latitude") Double latitude, @Param("longitude") Double longitude, @Param("limit") Integer limit);
 	
 	// [Reference] https://www.baeldung.com/spring-data-jpa-modifying-annotation
 	@Modifying

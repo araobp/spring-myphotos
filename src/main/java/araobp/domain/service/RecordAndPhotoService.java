@@ -19,6 +19,10 @@ public interface RecordAndPhotoService {
 	
 	Iterable<RecordEveryNth> selectRecordsEveryNth(Integer limit);
 	
+	Iterable<Record> selectRecordsClosestOrder(Double latitude, Double longitude, Integer limit, Integer offset);
+	
+	Iterable<RecordEveryNth> selectRecordsEveryNthClosestOrder(Double latitude, Double longitude, Integer limit);
+	
 	Optional<Record> selectRecordById(Integer id);
 	
 	Id insertRecord(Record record);

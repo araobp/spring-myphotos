@@ -20,4 +20,5 @@ public class RecordEveryNth {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private Timestamp timestamp;
 	private String place;
+	private Double distance;
 }

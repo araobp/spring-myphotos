@@ -24,4 +24,5 @@ public class Record {
 	private Double latitude;
 	private Double longitude;
 	private String address;
+	private Double distance;
 }

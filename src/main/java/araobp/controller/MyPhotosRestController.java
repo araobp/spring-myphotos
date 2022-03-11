@@ -59,8 +59,13 @@ public class MyPhotosRestController {
 	}
 	
 	@GetMapping("/record")
-	public Iterable<Record> getRecords(@RequestParam Integer limit, @RequestParam Integer offset) {
-		Iterable<Record> records = recordAndPhotoService.selectRecords(limit, offset);
+	public Iterable<Record> getRecords(@RequestParam(required = false) Double latitude, @RequestParam(required = false) Double longitude, @RequestParam Integer limit, @RequestParam Integer offset) {
+		Iterable<Record> records;
+		if (latitude != null&& longitude != null) {
+			records = recordAndPhotoService.selectRecordsClosestOrder(latitude, longitude, limit, offset);						
+		} else {
+			records = recordAndPhotoService.selectRecords(limit, offset);			
+		}
 		return records;
 	}
 		
@@ -128,8 +133,14 @@ public class MyPhotosRestController {
 	}
 	
 	@GetMapping("/management/record/everynth")
-	public Iterable<RecordEveryNth> getRecordsEveryNth(@RequestParam Integer limit) {
-		return recordAndPhotoService.selectRecordsEveryNth(limit);
+	public Iterable<RecordEveryNth> getRecordsEveryNth(@RequestParam(required = false) Double latitude, @RequestParam(required = false) Double longitude, @RequestParam Integer limit) {
+		Iterable<RecordEveryNth> records;
+		if (latitude != null && longitude != null) {
+			records = recordAndPhotoService.selectRecordsEveryNthClosestOrder(latitude, longitude, limit);
+		} else {
+			records = recordAndPhotoService.selectRecordsEveryNth(limit);
+		}
+		return records;
 	}
 
 	@GetMapping("/management/gpslog/count")

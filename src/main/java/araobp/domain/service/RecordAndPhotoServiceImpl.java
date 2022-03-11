@@ -78,6 +78,16 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	public Iterable<RecordEveryNth> selectRecordsEveryNth(Integer limit) {
 		return recordRepository.getRecordsEveryNth(limit);
 	}
+	
+	@Override
+	public Iterable<Record> selectRecordsClosestOrder(Double langitude, Double longitude, Integer limit, Integer offset) {
+		return recordRepository.getRecordsClosestOrder(langitude, longitude, limit, offset);
+	}
+	
+	@Override
+	public Iterable<RecordEveryNth> selectRecordsEveryNthClosestOrder(Double langitude, Double longitude, Integer limit) {
+		return recordRepository.getRecordsEveryNthClosestOrder(langitude, longitude, limit);
+	}
 
 	@Override
 	public Id insertRecord(Record record) {
