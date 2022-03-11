@@ -39,43 +39,33 @@ ARAOBP_MYPHOTOS_PASSWORD_DEFAULT
 
 ```
 DATABASE=> \d record
-                                 Table "public.record"
-  Column   |     Type      | Collation | Nullable |              Default               
------------+---------------+-----------+----------+------------------------------------
- id        | integer       |           | not null | nextval('record_id_seq'::regclass)
- datetime  | text          |           |          | 
- place     | text          |           |          | 
- memo      | text          |           |          | 
- latitude  | numeric(12,8) |           |          | 
- longitude | numeric(12,8) |           |          | 
+                                      Table "public.record"
+  Column   |           Type           | Collation | Nullable |              Default               
+-----------+--------------------------+-----------+----------+------------------------------------
+ id        | integer                  |           | not null | nextval('record_id_seq'::regclass)
+ place     | text                     |           |          | 
+ memo      | text                     |           |          | 
+ latitude  | numeric(12,8)            |           |          | 
+ longitude | numeric(12,8)            |           |          | 
+ address   | text                     |           |          | 
+ timestamp | timestamp with time zone |           |          | 
 Indexes:
     "record_pkey" PRIMARY KEY, btree (id)
 Referenced by:
     TABLE "photo" CONSTRAINT "photo_record_fkey" FOREIGN KEY (record_id) REFERENCES record(id) ON DELETE CASCADE
 
 DATABASE=> \d photo
-                 Table "public.photo"
-  Column   |  Type   | Collation | Nullable | Default 
------------+---------+-----------+----------+---------
- record_id | integer |           | not null | 
- image     | bytea   |           |          | 
- thumbnail | bytea   |           |          | 
+                    Table "public.photo"
+     Column      |  Type   | Collation | Nullable | Default 
+-----------------+---------+-----------+----------+---------
+ record_id       | integer |           | not null | 
+ image           | bytea   |           |          | 
+ thumbnail       | bytea   |           |          | 
+ equirectangular | boolean |           |          | 
 Indexes:
     "photo_pkey" PRIMARY KEY, btree (record_id)
 Foreign-key constraints:
     "photo_record_fkey" FOREIGN KEY (record_id) REFERENCES record(id) ON DELETE CASCADE
-
-DATABASE=> \d gps_log;
-                                 Table "public.gps_log"
-  Column   |     Type      | Collation | Nullable |               Default               
------------+---------------+-----------+----------+-------------------------------------
- id        | integer       |           | not null | nextval('gps_log_id_seq'::regclass)
- datetime  | text          |           |          | 
- latitude  | numeric(12,8) |           |          | 
- longitude | numeric(12,8) |           |          | 
- session   | integer       |           |          | 
-Indexes:
-    "gps_log_pkey" PRIMARY KEY, btree (id)
 ```
 
 ## Tips
