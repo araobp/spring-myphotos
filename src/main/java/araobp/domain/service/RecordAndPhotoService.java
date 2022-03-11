@@ -40,7 +40,5 @@ public interface RecordAndPhotoService {
 	Optional<Id> selectTailId();
 	
 	Count count();
-		
-	void migrate();
 
 }

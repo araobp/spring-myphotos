@@ -136,9 +136,4 @@ public class MyPhotosRestController {
 	public Count gpsLogCount() throws ResponseStatusException {
 		return gpsLogService.countSessions();
 	}
-	
-	@GetMapping("/management/migrate")
-	public void migrate() {
-		recordAndPhotoService.migrate();
-	}
 }

@@ -180,7 +180,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 					instant = instant.minus(UTC_OFFSET, ChronoUnit.HOURS); // EXIF datetime does not take time zone into account
 					String datetime = instant.toString();
 					Timestamp timestamp = Timestamp.from(instant);
-					recordRepository.updateDatetime(id, datetime, timestamp);
+					recordRepository.updateTimestamp(id, timestamp);
 				}
 
 				// Resize image
@@ -239,19 +239,4 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 		return new Count(count);
 	}
 	
-	@Override
-	public void migrate() {
-		Iterable<Record> records = selectRecords(1024, 0);
-		records.forEach( (r) -> {
-			int id = r.getId();
-			String datetime = r.getDatetime();
-			Timestamp timestamp = r.getTimestamp();
-			if (timestamp == null || timestamp.toString() == "") {
-				Instant instant = Instant.parse(datetime);
-				Timestamp newTimestamp = Timestamp.from(instant);
-				r.setTimestamp(newTimestamp);
-				recordRepository.updateTimestamp(id, newTimestamp);
-			}
-		});
-	}
 }

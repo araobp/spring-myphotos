@@ -16,10 +16,10 @@ public interface RecordRepository extends CrudRepository<Record, Integer> {
 	@Query("SELECT id FROM record WHERE id = :id")
 	public Iterable<Record> checkIfIdExists(@Param("id") Integer id);
 	
-	@Query("SELECT * FROM record ORDER BY datetime DESC LIMIT :limit OFFSET :offset")
+	@Query("SELECT * FROM record ORDER BY timestamp DESC LIMIT :limit OFFSET :offset")
 	public Iterable<Record> getRecords(@Param("limit") Integer limit, @Param("offset") Integer offset);
 	
-	@Query("SELECT t.* FROM (SELECT id, datetime, place, row_number() OVER (ORDER BY datetime DESC) AS ROW FROM record) t WHERE t.row % :limit = 1")
+	@Query("SELECT t.* FROM (SELECT id, timestamp, place, row_number() OVER (ORDER BY timestamp DESC) AS ROW FROM record) t WHERE t.row % :limit = 1")
 	public Iterable<RecordEveryNth> getRecordsEveryNth(@Param("limit") Integer limit);
 	
 	// [Reference] https://www.baeldung.com/spring-data-jpa-modifying-annotation
@@ -28,8 +28,8 @@ public interface RecordRepository extends CrudRepository<Record, Integer> {
 	public Integer updateRecord(@Param("id") Integer id, @Param("place") String place, @Param("memo") String memo);
 
 	@Modifying
-	@Query("UPDATE record SET datetime = :datetime, timestamp = :timestamp WHERE id = :id")
-	public Integer updateDatetime(@Param("id") Integer id, @Param("datetime") String datetime, @Param("timestamp") Timestamp timestamp);
+	@Query("UPDATE record SET timestamp = :timestamp WHERE id = :id")
+	public Integer updateTimestamp(@Param("id") Integer id, @Param("timestamp") Timestamp timestamp);
 	
 	@Modifying
 	@Query("UPDATE record SET address = :address WHERE id = :id")
@@ -48,9 +48,4 @@ public interface RecordRepository extends CrudRepository<Record, Integer> {
 	@Query("SELECT COUNT(id) FROM record")
 	public long count();	
 	
-	/*** Migration ***/
-	@Modifying
-	@Query("UPDATE record SET timestamp = :timestamp WHERE id = :id")
-	public Integer updateTimestamp(@Param("id") Integer id, @Param("timestamp") Timestamp timestamp);
-
 }
