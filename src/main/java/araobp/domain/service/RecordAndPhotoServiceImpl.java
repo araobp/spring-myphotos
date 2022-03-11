@@ -3,6 +3,7 @@ package araobp.domain.service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -81,8 +82,10 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	@Override
 	public Id insertRecord(Record record) {
 		record.setId(null);
-		String datetime = Instant.now().toString(); // UTC
+		String datetime = Instant.now().toString(); // UTC		
+		Timestamp timestamp = Timestamp.from(Instant.now());
 		record.setDatetime(datetime);
+		record.setTimestamp(timestamp);
 		Record r = recordRepository.save(record);
 		return new Id(r.getId());
 	}
@@ -176,7 +179,8 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 					Instant instant = date.toInstant();
 					instant = instant.minus(UTC_OFFSET, ChronoUnit.HOURS); // EXIF datetime does not take time zone into account
 					String datetime = instant.toString();
-					recordRepository.updateDatetime(id, datetime);
+					Timestamp timestamp = Timestamp.from(instant);
+					recordRepository.updateDatetime(id, datetime, timestamp);
 				}
 
 				// Resize image
@@ -233,5 +237,21 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	public Count count() {
 		long count = recordRepository.count();
 		return new Count(count);
+	}
+	
+	@Override
+	public void migrate() {
+		Iterable<Record> records = selectRecords(1024, 0);
+		records.forEach( (r) -> {
+			int id = r.getId();
+			String datetime = r.getDatetime();
+			Timestamp timestamp = r.getTimestamp();
+			if (timestamp == null || timestamp.toString() == "") {
+				Instant instant = Instant.parse(datetime);
+				Timestamp newTimestamp = Timestamp.from(instant);
+				r.setTimestamp(newTimestamp);
+				recordRepository.updateTimestamp(id, newTimestamp);
+			}
+		});
 	}
 }

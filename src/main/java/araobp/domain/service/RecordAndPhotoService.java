@@ -1,6 +1,9 @@
 package araobp.domain.service;
 
+import java.sql.Timestamp;
 import java.util.Optional;
+
+import org.springframework.data.repository.query.Param;
 
 import araobp.domain.entity.Count;
 import araobp.domain.entity.Id;
@@ -37,4 +40,7 @@ public interface RecordAndPhotoService {
 	Optional<Id> selectTailId();
 	
 	Count count();
+		
+	void migrate();
+
 }

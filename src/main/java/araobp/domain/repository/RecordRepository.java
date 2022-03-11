@@ -1,5 +1,6 @@
 package araobp.domain.repository;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.springframework.data.jdbc.repository.query.Modifying;
@@ -27,8 +28,8 @@ public interface RecordRepository extends CrudRepository<Record, Integer> {
 	public Integer updateRecord(@Param("id") Integer id, @Param("place") String place, @Param("memo") String memo);
 
 	@Modifying
-	@Query("UPDATE record SET datetime = :datetime WHERE id = :id")
-	public Integer updateDatetime(@Param("id") Integer id, @Param("datetime") String datetime);
+	@Query("UPDATE record SET datetime = :datetime, timestamp = :timestamp WHERE id = :id")
+	public Integer updateDatetime(@Param("id") Integer id, @Param("datetime") String datetime, @Param("timestamp") Timestamp timestamp);
 	
 	@Modifying
 	@Query("UPDATE record SET address = :address WHERE id = :id")
@@ -46,4 +47,10 @@ public interface RecordRepository extends CrudRepository<Record, Integer> {
 	
 	@Query("SELECT COUNT(id) FROM record")
 	public long count();	
+	
+	/*** Migration ***/
+	@Modifying
+	@Query("UPDATE record SET timestamp = :timestamp WHERE id = :id")
+	public Integer updateTimestamp(@Param("id") Integer id, @Param("timestamp") Timestamp timestamp);
+
 }
