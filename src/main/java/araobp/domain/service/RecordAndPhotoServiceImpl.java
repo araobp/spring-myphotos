@@ -74,19 +74,21 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	public Iterable<RecordWithDistance> selectRecords(Integer limit, Integer offset) {
 		return recordRepository.getRecords(limit, offset);
 	}
-	
+
 	@Override
 	public Iterable<RecordEveryNth> selectRecordsEveryNth(Integer limit) {
 		return recordRepository.getRecordsEveryNth(limit);
 	}
-	
+
 	@Override
-	public Iterable<RecordWithDistance> selectRecordsClosestOrder(Double langitude, Double longitude, Integer limit, Integer offset) {
+	public Iterable<RecordWithDistance> selectRecordsClosestOrder(Double langitude, Double longitude, Integer limit,
+			Integer offset) {
 		return recordRepository.getRecordsClosestOrder(langitude, longitude, limit, offset);
 	}
-	
+
 	@Override
-	public Iterable<RecordEveryNth> selectRecordsEveryNthClosestOrder(Double langitude, Double longitude, Integer limit) {
+	public Iterable<RecordEveryNth> selectRecordsEveryNthClosestOrder(Double langitude, Double longitude,
+			Integer limit) {
 		return recordRepository.getRecordsEveryNthClosestOrder(langitude, longitude, limit);
 	}
 
@@ -168,7 +170,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 						}
 					}
 				}
-				
+
 				// Try to get geo location from the image
 				String address = "";
 				GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
@@ -176,19 +178,25 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 					GeoLocation geoLocation = gpsDirectory.getGeoLocation();
 					Double latitude = geoLocation.getLatitude();
 					Double longitude = geoLocation.getLongitude();
-					recordRepository.updateLatLon(id, latitude, longitude);
-					address = nominatim.getAddress(latitude, longitude);
-					recordRepository.updateAddress(id, address);
+					if (latitude != null && latitude != 0.0 && longitude != null && longitude != 0.0) {
+						recordRepository.updateLatLon(id, latitude, longitude);
+						address = nominatim.getAddress(latitude, longitude);
+						recordRepository.updateAddress(id, address);
+					}
 				}
 
 				// Try to get datetime from the image
 				ExifSubIFDDirectory exifSubIfdDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
 				if (exifSubIfdDirectory != null) {
 					Date date = exifSubIfdDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
-					Instant instant = date.toInstant();
-					instant = instant.minus(UTC_OFFSET, ChronoUnit.HOURS); // EXIF datetime does not take time zone into account
-					Timestamp timestamp = Timestamp.from(instant);
-					recordRepository.updateTimestamp(id, timestamp);
+					if (date != null) {
+						Instant instant = date.toInstant();
+						instant = instant.minus(UTC_OFFSET, ChronoUnit.HOURS); // EXIF datetime does not take time zone
+																				// into
+																				// account
+						Timestamp timestamp = Timestamp.from(instant);
+						recordRepository.updateTimestamp(id, timestamp);
+					}
 				}
 
 				// Resize image
@@ -200,7 +208,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 				// Insert the image data to photo table
 				byte[] thumbnail = outputStream.toByteArray();
 				Integer affectedRows = photoRepository.insertImageAndThumbnail(id, image, thumbnail, equirectangular);
-				
+
 				return (affectedRows == 1) ? true : false;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -246,5 +254,5 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 		long count = recordRepository.count();
 		return new Count(count);
 	}
-	
+
 }
