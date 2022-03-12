@@ -33,6 +33,7 @@ import araobp.domain.entity.Photo;
 import araobp.domain.entity.PhotoAttribute;
 import araobp.domain.entity.Record;
 import araobp.domain.entity.RecordEveryNth;
+import araobp.domain.entity.RecordWithDistance;
 import araobp.domain.repository.PhotoRepository;
 import araobp.domain.repository.RecordRepository;
 import araobp.nominatim.Nominatim;
@@ -70,7 +71,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	}
 
 	@Override
-	public Iterable<Record> selectRecords(Integer limit, Integer offset) {
+	public Iterable<RecordWithDistance> selectRecords(Integer limit, Integer offset) {
 		return recordRepository.getRecords(limit, offset);
 	}
 	
@@ -80,7 +81,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	}
 	
 	@Override
-	public Iterable<Record> selectRecordsClosestOrder(Double langitude, Double longitude, Integer limit, Integer offset) {
+	public Iterable<RecordWithDistance> selectRecordsClosestOrder(Double langitude, Double longitude, Integer limit, Integer offset) {
 		return recordRepository.getRecordsClosestOrder(langitude, longitude, limit, offset);
 	}
 	
@@ -92,9 +93,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	@Override
 	public Id insertRecord(Record record) {
 		record.setId(null);
-		String datetime = Instant.now().toString(); // UTC		
 		Timestamp timestamp = Timestamp.from(Instant.now());
-		record.setDatetime(datetime);
 		record.setTimestamp(timestamp);
 		Record r = recordRepository.save(record);
 		return new Id(r.getId());
@@ -188,7 +187,6 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 					Date date = exifSubIfdDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
 					Instant instant = date.toInstant();
 					instant = instant.minus(UTC_OFFSET, ChronoUnit.HOURS); // EXIF datetime does not take time zone into account
-					String datetime = instant.toString();
 					Timestamp timestamp = Timestamp.from(instant);
 					recordRepository.updateTimestamp(id, timestamp);
 				}

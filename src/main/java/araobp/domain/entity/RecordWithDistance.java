@@ -12,12 +12,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecordEveryNth {
+public class RecordWithDistance {
 
 	@Id
 	private Integer id;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private Timestamp timestamp;
 	private String place;
+	private String memo;
+	private Double latitude;
+	private Double longitude;
+	private String address;
 	private Double distance;
 }

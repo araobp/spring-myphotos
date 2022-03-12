@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import araobp.domain.entity.Record;
 import araobp.domain.entity.RecordEveryNth;
+import araobp.domain.entity.RecordWithDistance;
 
 public interface RecordRepository extends CrudRepository<Record, Integer> {
 
@@ -17,10 +18,10 @@ public interface RecordRepository extends CrudRepository<Record, Integer> {
 	public Iterable<Record> checkIfIdExists(@Param("id") Integer id);
 	
 	@Query("SELECT * FROM record ORDER BY timestamp DESC LIMIT :limit OFFSET :offset")
-	public Iterable<Record> getRecords(@Param("limit") Integer limit, @Param("offset") Integer offset);
+	public Iterable<RecordWithDistance> getRecords(@Param("limit") Integer limit, @Param("offset") Integer offset);
 	
 	@Query("SELECT *, ( 6371 * ACOS( COS( RADIANS( :latitude ) ) * COS( RADIANS( latitude ) ) * COS( RADIANS( longitude ) - RADIANS( :longitude) ) + SIN( RADIANS( :latitude ) ) * SIN( RADIANS( latitude ) ) ) ) AS distance FROM record ORDER BY distance LIMIT :limit OFFSET :offset")
-	public Iterable<Record> getRecordsClosestOrder(@Param("latitude") Double latitude, @Param("longitude") Double longitude, @Param("limit") Integer limit, @Param("offset") Integer offset);
+	public Iterable<RecordWithDistance> getRecordsClosestOrder(@Param("latitude") Double latitude, @Param("longitude") Double longitude, @Param("limit") Integer limit, @Param("offset") Integer offset);
 	
 	@Query("SELECT * FROM (SELECT id, timestamp, place, row_number() OVER (ORDER BY timestamp DESC) AS ROW FROM record) t WHERE t.row % :limit = 1")
 	public Iterable<RecordEveryNth> getRecordsEveryNth(@Param("limit") Integer limit);

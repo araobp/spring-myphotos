@@ -1,25 +1,23 @@
 package araobp.domain.service;
 
-import java.sql.Timestamp;
 import java.util.Optional;
-
-import org.springframework.data.repository.query.Param;
 
 import araobp.domain.entity.Count;
 import araobp.domain.entity.Id;
 import araobp.domain.entity.PhotoAttribute;
 import araobp.domain.entity.Record;
 import araobp.domain.entity.RecordEveryNth;
+import araobp.domain.entity.RecordWithDistance;
 
 public interface RecordAndPhotoService {
 	
 	Boolean checkIfIdExists(Integer id);
 	
-	Iterable<Record> selectRecords(Integer limit, Integer offset);
+	Iterable<RecordWithDistance> selectRecords(Integer limit, Integer offset);
 	
 	Iterable<RecordEveryNth> selectRecordsEveryNth(Integer limit);
 	
-	Iterable<Record> selectRecordsClosestOrder(Double latitude, Double longitude, Integer limit, Integer offset);
+	Iterable<RecordWithDistance> selectRecordsClosestOrder(Double latitude, Double longitude, Integer limit, Integer offset);
 	
 	Iterable<RecordEveryNth> selectRecordsEveryNthClosestOrder(Double latitude, Double longitude, Integer limit);
 	

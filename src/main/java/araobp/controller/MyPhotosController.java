@@ -30,6 +30,7 @@ public class MyPhotosController {
 	@GetMapping("/album")
 	public String showAlbum(Model model) {
 
+		/*
 		Iterable<Record> records = service.selectRecords(LIMIT, OFFSET);
 
 		for (Record r : records) {
@@ -44,9 +45,10 @@ public class MyPhotosController {
 				r.setDatetime("- - -");
 			}
 		}
-
+		
 		model.addAttribute("records", records);
-
+		*/
+		
 		return "album";
 	}
 }

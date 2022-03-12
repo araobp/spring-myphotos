@@ -23,6 +23,7 @@ import araobp.domain.entity.Id;
 import araobp.domain.entity.PhotoAttribute;
 import araobp.domain.entity.Record;
 import araobp.domain.entity.RecordEveryNth;
+import araobp.domain.entity.RecordWithDistance;
 import araobp.domain.service.GpsLogService;
 import araobp.domain.service.RecordAndPhotoService;
 
@@ -59,8 +60,8 @@ public class MyPhotosRestController {
 	}
 	
 	@GetMapping("/record")
-	public Iterable<Record> getRecords(@RequestParam(required = false) Double latitude, @RequestParam(required = false) Double longitude, @RequestParam Integer limit, @RequestParam Integer offset) {
-		Iterable<Record> records;
+	public Iterable<RecordWithDistance> getRecords(@RequestParam(required = false) Double latitude, @RequestParam(required = false) Double longitude, @RequestParam Integer limit, @RequestParam Integer offset) {
+		Iterable<RecordWithDistance> records;
 		if (latitude != null&& longitude != null) {
 			records = recordAndPhotoService.selectRecordsClosestOrder(latitude, longitude, limit, offset);						
 		} else {

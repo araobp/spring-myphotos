@@ -16,7 +16,6 @@ public class Record {
 
 	@Id
 	private Integer id;
-	private String datetime;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private Timestamp timestamp;
 	private String place;
@@ -24,5 +23,4 @@ public class Record {
 	private Double latitude;
 	private Double longitude;
 	private String address;
-	private Double distance;
 }
