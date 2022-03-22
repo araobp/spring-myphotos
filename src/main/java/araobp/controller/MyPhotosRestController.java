@@ -49,7 +49,7 @@ public class MyPhotosRestController {
 	}
 	
 	@PatchMapping("/record/{id}")
-	public void putRecord(@PathVariable Integer id, @RequestBody Record record) {
+	public void patchRecord(@PathVariable Integer id, @RequestBody Record record) {
 		Boolean success = recordAndPhotoService.updateRecord(id, record.getPlace(), record.getMemo());
 		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 	}
