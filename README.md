@@ -6,8 +6,6 @@ REST API server for [react-myphotos](https://github.com/araobp/react-myphotos)
 
 [REST API specification in OpenAPI YAML format](./doc/restapi.yaml)
 
-or uncomment	//implementation 'io.springfox:springfox-boot-starter:3.0.0' in build.gradle and access auto-generated API dpcumentation: http://localhost:8080/swagger-ui/index.html
-
 ## Relationship to my other project on GitHub
 
 [react-myphotos(frontend)](https://github.com/araobp/react-myphotos) --- REST API --- spring-myphotos(backend)
