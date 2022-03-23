@@ -4,7 +4,7 @@ REST API server for [react-myphotos](https://github.com/araobp/react-myphotos)
 
 ## REST API specification
 
-[REST API specification in OpenAPI YAML format](./doc/restapi.yaml)
+[REST API specification in OpenAPI JSON format](./doc/api.json)
 
 ## Relationship to my other project on GitHub
 
