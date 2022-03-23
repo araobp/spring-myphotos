@@ -1,0 +1,313 @@
+#%RAML 1.0
+securitySchemes:
+  Basic auth:
+    type: Basic Authentication
+mediaType:
+  - application/json
+version: 1.0.0
+protocols:
+  - HTTPS
+/record/{id}:
+  get:
+    displayName: Get a record
+    responses:
+      "200":
+        body:
+          application/json:
+            type: RecordResponse
+    securedBy:
+      - Basic auth
+  uriParameters:
+    id:
+      example: 1
+      type: number
+      format: int
+  patch:
+    displayName: Update a record
+    body:
+      application/json:
+        example:
+          strict: true
+          value:
+            place: Lazona Kawasaki Plaza
+            memo: Walking around now
+        properties:
+          place:
+            example: Lazona Kawasaki Plaza
+            type: string
+          memo:
+            example: Walking around now
+            type: string
+    responses:
+      "200": {}
+    securedBy:
+      - Basic auth
+  delete:
+    displayName: Delete a record
+    securedBy:
+      - Basic auth
+    responses:
+      "200": {}
+securedBy:
+  - Basic auth
+/record:
+  get:
+    displayName: Get a list of records
+    responses:
+      "200":
+        body:
+          application/json:
+            items:
+              type: RecordResponse
+    securedBy:
+      - Basic auth
+    queryParameters:
+      limit:
+        example: 16
+        type: number
+        format: int
+      offset:
+        example: 3
+        type: number
+        format: int
+      latitude?:
+        example: 35.53271077
+        type: number
+        format: double
+      longitude?:
+        example: 139.69584424
+        type: number
+        format: double
+  post:
+    displayName: Create a new record
+    responses:
+      "200":
+        body:
+          application/json:
+            type: Id
+            example:
+              strict: true
+              value:
+                id: 64
+    securedBy:
+      - Basic auth
+    body:
+      application/json:
+        type: RecordRequest
+        example:
+          strict: true
+          value:
+            latitude: 35.53271077
+            longitude: 139.69584424
+            address: 72-1 Horikawacho, Saiwai Ward, Kawasaki, Kanagawa 212-8576
+            place: Lazona Kawasaki Plaza
+            memo: Shopping now
+/photo/{id}:
+  post:
+    displayName: Create an image
+    body:
+      application/octet-stream:
+        example: ... JPEG image data in binary ...
+        type: string
+    responses:
+      "200": {}
+  uriParameters:
+    id:
+      example: 1
+      type: number
+      format: int
+/photo/{id}/attribute:
+  get:
+    displayName: Get a photo attribute
+    responses:
+      "200":
+        body:
+          application/json:
+            type: PhotoAttribute
+    securedBy:
+      - Basic auth
+/photos/{id}/image:
+  get:
+    displayName: Get an image
+    responses:
+      "200":
+        body:
+          application/octet-stream:
+            example: ... JPEG image data in binary ...
+            type: string
+    securedBy:
+      - Basic auth
+  uriParameters:
+    id:
+      example: 1
+      type: number
+      format: int
+/photos/{id}/thumbnail:
+  get:
+    displayName: Get a thumbnail image
+    responses:
+      "200":
+        body:
+          application/octet-stream:
+            example: ... JPEG image data in binary ...
+            type: string
+    securedBy:
+      - Basic auth
+  uriParameters:
+    id:
+      example: 1
+      type: number
+      format: int
+/management/record/count:
+  get:
+    responses:
+      "200":
+        body:
+          application/json:
+            description: The total number of records
+            example:
+              strict: true
+              value:
+                count: 256
+            properties:
+              count:
+                example: 1
+                type: number
+                format: int
+    securedBy:
+      - Basic auth
+    displayName: Get the total number of records
+/management/record/everynth:
+  get:
+    responses:
+      "200":
+        body:
+          application/json:
+            items:
+              type: RecordEveryNthResponse
+    queryParameters:
+      limit:
+        example: 16
+        type: number
+        format: int
+      latitude?:
+        example: 35.53271077
+        type: number
+        format: double
+      longitude?:
+        example: 139.69584424
+        type: number
+        format: double
+types:
+  PhotoAttribute:
+    properties:
+      equirectangular:
+        example: true
+        type: boolean
+  RecordEveryNthResponse:
+    example:
+      strict: true
+      value:
+        id: 1
+        timestamp: 2022-02-14T06:33:48.335Z
+        place: Lazona Kawasaki Plaza
+        distance: 1.1
+    properties:
+      id:
+        example: 1
+        type: number
+        format: int
+      timestamp:
+        example: 2022-02-14T06:33:48.335Z
+        type: string
+      place:
+        example: Lazona Kawasaki Plaza
+        type: string
+      distance:
+        example: 1.1
+        type: number
+        format: double
+  Id:
+    example:
+      strict: true
+      value:
+        id: 64
+    properties:
+      id:
+        example: 1
+        type: number
+        format: int
+  RecordResponse:
+    example:
+      strict: true
+      value:
+        timestamp: 2022-02-14T06:33:48.335Z
+        latitude: 35.53271077
+        longitude: 139.69584424
+        id: 1
+        address: 72-1 Horikawacho, Saiwai Ward, Kawasaki, Kanagawa 212-8576
+        place: Lazona Kawasaki Plaza
+        memo: Go shopping
+        distance: 1.1
+    properties:
+      id:
+        example: 1
+        type: number
+        format: int
+      timestamp:
+        example: 2022-02-14T06:33:48.335Z
+        type: string
+      place:
+        example: Lazona Kawasaki Plaza
+        type: string
+      memo:
+        example: Go shopping
+        type: string
+      latitude:
+        example: 35.53271077
+        type: number
+        format: double
+      longitude:
+        example: 139.69584424
+        type: number
+        format: double
+      address:
+        example: 72-1 Horikawacho, Saiwai Ward, Kawasaki, Kanagawa 212-8576
+        type: string
+      distance?:
+        example: 1.1
+        type: number
+        format: double
+  RecordRequest:
+    example:
+      strict: true
+      value:
+        latitude: 35.53271077
+        longitude: 139.69584424
+        address: 72-1 Horikawacho, Saiwai Ward, Kawasaki, Kanagawa 212-8576
+        place: Lazona Kawasaki Plaza
+        memo: Go shopping
+    properties:
+      place:
+        example: Lazona Kawasaki Plaza
+        type: string
+      memo:
+        example: Go shopping
+        type: string
+      latitude:
+        example: 35.53271077
+        type: number
+        format: double
+      longitude:
+        example: 139.69584424
+        type: number
+        format: double
+      address:
+        example: 72-1 Horikawacho, Saiwai Ward, Kawasaki, Kanagawa 212-8576
+        type: string
+title: MyPhotos API
+baseUri: anonymous
+description: |
+  # My photos service
+
+  This API service with Spring Boot runs on Heroku PaaS.
