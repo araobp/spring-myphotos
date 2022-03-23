@@ -1,0 +1,726 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "MyPhotos API",
+    "description": "# My photos service\n\nThis API service with Spring Boot runs on Heroku PaaS.\n",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/record/{id}": {
+      "get": {
+        "operationId": "Get a record",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "example": 1,
+              "type": "integer",
+              "format": "int"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic auth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "anonymous"
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "Update a record",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "example": 1,
+              "type": "integer",
+              "format": "int"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "strict": true,
+                  "value": {
+                    "place": "Lazona Kawasaki Plaza",
+                    "memo": "Walking around now"
+                  }
+                },
+                "type": "object",
+                "additionalProperties": true,
+                "required": [
+                  "place",
+                  "memo"
+                ],
+                "properties": {
+                  "place": {
+                    "example": "Lazona Kawasaki Plaza",
+                    "type": "string"
+                  },
+                  "memo": {
+                    "example": "Walking around now",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "Basic auth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "anonymous"
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "Delete a record",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "example": 1,
+              "type": "integer",
+              "format": "int"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "Basic auth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "anonymous"
+          }
+        ]
+      }
+    },
+    "/record": {
+      "get": {
+        "operationId": "Get a list of records",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "integer",
+              "format": "int"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "integer",
+              "format": "int"
+            }
+          },
+          {
+            "name": "latitude",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "integer",
+              "format": "int"
+            }
+          },
+          {
+            "name": "longitude",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "integer",
+              "format": "int"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecordResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic auth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "anonymous"
+          }
+        ]
+      },
+      "post": {
+        "operationId": "Create a new record",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Id"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic auth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "anonymous"
+          }
+        ]
+      }
+    },
+    "/photo/{id}": {
+      "post": {
+        "operationId": "Create an image",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "example": 1,
+              "type": "integer",
+              "format": "int"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "example": "... JPEG image data in binary ...",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "Basic auth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "anonymous"
+          }
+        ]
+      }
+    },
+    "/photo/{id}/attribute": {
+      "get": {
+        "operationId": "Get a photo attribute",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhotoAttribute"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic auth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "anonymous"
+          }
+        ]
+      }
+    },
+    "/photos/{id}/image": {
+      "get": {
+        "operationId": "Get an image",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "example": 1,
+              "type": "integer",
+              "format": "int"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "example": "... JPEG image data in binary ...",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic auth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "anonymous"
+          }
+        ]
+      }
+    },
+    "/photos/{id}/thumbnail": {
+      "get": {
+        "operationId": "Get a thumbnail image",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "example": 1,
+              "type": "integer",
+              "format": "int"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "example": "... JPEG image data in binary ...",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic auth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "anonymous"
+          }
+        ]
+      }
+    },
+    "/management/record/count": {
+      "get": {
+        "operationId": "Get the total number of records",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "The total number of records",
+                  "example": {
+                    "strict": true,
+                    "value": {
+                      "count": 256
+                    }
+                  },
+                  "type": "object",
+                  "additionalProperties": true,
+                  "required": [
+                    "count"
+                  ],
+                  "properties": {
+                    "count": {
+                      "example": 1,
+                      "type": "integer",
+                      "format": "int"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic auth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "anonymous"
+          }
+        ]
+      }
+    },
+    "/management/record/everynth": {
+      "get": {
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "integer",
+              "format": "int"
+            }
+          },
+          {
+            "name": "latitude",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": 35.53271077,
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "longitude",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": 139.69584424,
+              "type": "number",
+              "format": "double"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {}
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecordEveryNthResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Basic auth": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "anonymous"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RecordResponse": {
+        "example": {
+          "strict": true,
+          "value": {
+            "id": 1,
+            "timestamp": "2022-02-14T06:33:48.335Z",
+            "place": "Lazona Kawasaki Plaza",
+            "memo": "Go shopping",
+            "latitude": 35.53271077,
+            "longitude": 139.69584424,
+            "address": "72-1 Horikawacho, Saiwai Ward, Kawasaki, Kanagawa 212-8576",
+            "distance": 1.1
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "timestamp",
+          "place",
+          "memo",
+          "latitude",
+          "longitude",
+          "address"
+        ],
+        "properties": {
+          "id": {
+            "example": 1,
+            "type": "integer",
+            "format": "int"
+          },
+          "timestamp": {
+            "example": "Example",
+            "type": "string"
+          },
+          "place": {
+            "example": "Example",
+            "type": "string"
+          },
+          "memo": {
+            "example": "Example",
+            "type": "string"
+          },
+          "latitude": {
+            "example": 1,
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "example": 1,
+            "type": "number",
+            "format": "double"
+          },
+          "address": {
+            "example": "Example",
+            "type": "string"
+          },
+          "distance": {
+            "example": 1,
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "RecordRequest": {
+        "example": {
+          "strict": true,
+          "value": {
+            "place": "Lazona Kawasaki Plaza",
+            "memo": "Shopping now",
+            "latitude": 35.53271077,
+            "longitude": 139.69584424,
+            "address": "72-1 Horikawacho, Saiwai Ward, Kawasaki, Kanagawa 212-8576"
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "place",
+          "memo",
+          "latitude",
+          "longitude",
+          "address"
+        ],
+        "properties": {
+          "place": {
+            "example": "Example",
+            "type": "string"
+          },
+          "memo": {
+            "example": "Example",
+            "type": "string"
+          },
+          "latitude": {
+            "example": 1,
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "example": 1,
+            "type": "number",
+            "format": "double"
+          },
+          "address": {
+            "example": "Example",
+            "type": "string"
+          }
+        }
+      },
+      "Id": {
+        "example": {
+          "strict": true,
+          "value": {
+            "id": 64
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "example": 1,
+            "type": "integer",
+            "format": "int"
+          }
+        }
+      },
+      "PhotoAttribute": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "equirectangular"
+        ],
+        "properties": {
+          "equirectangular": {
+            "example": true,
+            "type": "boolean"
+          }
+        }
+      },
+      "RecordEveryNthResponse": {
+        "example": {
+          "strict": true,
+          "value": {
+            "id": 1,
+            "timestamp": "2022-02-14T06:33:48.335Z",
+            "place": "Lazona Kawasaki Plaza",
+            "distance": 1.1
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "timestamp",
+          "place",
+          "distance"
+        ],
+        "properties": {
+          "id": {
+            "example": 1,
+            "type": "integer",
+            "format": "int"
+          },
+          "timestamp": {
+            "example": "2022-02-14T06:33:48.335Z",
+            "type": "string"
+          },
+          "place": {
+            "example": "Lazona Kawasaki Plaza",
+            "type": "string"
+          },
+          "distance": {
+            "example": 1.1,
+            "type": "number",
+            "format": "double"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Basic auth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  }
+}
