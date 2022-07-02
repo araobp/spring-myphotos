@@ -14,7 +14,7 @@ REST API server for [react-myphotos](https://github.com/araobp/react-myphotos)
 
 ### Connection to PostgreSQL
 
-Add "application.properties" file to the project root directory with the following properties:
+Add "application.properties" file to src/main/resources directory with the following properties:
 
 ```
 spring.datasource.driver-class-name=org.postgresql.Driver
