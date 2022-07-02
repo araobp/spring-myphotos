@@ -36,34 +36,65 @@ ARAOBP_MYPHOTOS_PASSWORD_DEFAULT
 ## psql output
 
 ```
-DATABASE=> \d record
-                                      Table "public.record"
-  Column   |           Type           | Collation | Nullable |              Default               
------------+--------------------------+-----------+----------+------------------------------------
- id        | integer                  |           | not null | nextval('record_id_seq'::regclass)
- place     | text                     |           |          | 
- memo      | text                     |           |          | 
- latitude  | numeric(12,8)            |           |          | 
- longitude | numeric(12,8)            |           |          | 
- address   | text                     |           |          | 
- timestamp | timestamp with time zone |           |          | 
-Indexes:
-    "record_pkey" PRIMARY KEY, btree (id)
-Referenced by:
-    TABLE "photo" CONSTRAINT "photo_record_fkey" FOREIGN KEY (record_id) REFERENCES record(id) ON DELETE CASCADE
+DATABASE=> set search_path to salesforce;                                                                                                     SET
 
-DATABASE=> \d photo
-                    Table "public.photo"
-     Column      |  Type   | Collation | Nullable | Default 
------------------+---------+-----------+----------+---------
- record_id       | integer |           | not null | 
- image           | bytea   |           |          | 
- thumbnail       | bytea   |           |          | 
- equirectangular | boolean |           |          | 
+DATABASE=> \d
+                       List of relations
+   Schema   |         Name         |   Type   |     Owner      
+------------+----------------------+----------+----------------
+ salesforce | _hcmeta              | table    | bpkutsjczkjxhz
+ salesforce | _hcmeta_id_seq       | sequence | bpkutsjczkjxhz
+ salesforce | _sf_event_log        | table    | bpkutsjczkjxhz
+ salesforce | _sf_event_log_id_seq | sequence | bpkutsjczkjxhz
+ salesforce | _trigger_log         | table    | bpkutsjczkjxhz
+ salesforce | _trigger_log_archive | table    | bpkutsjczkjxhz
+ salesforce | _trigger_log_id_seq  | sequence | bpkutsjczkjxhz
+ salesforce | photo                | table    | bpkutsjczkjxhz
+ salesforce | record__c            | table    | bpkutsjczkjxhz
+ salesforce | record__c_id_seq     | sequence | bpkutsjczkjxhz
+(10 rows)
+
+DATABASE=> \d record__c;
+                                              Table "salesforce.record__c"
+          Column           |            Type             | Collation | Nullable |                Default                
+---------------------------+-----------------------------+-----------+----------+---------------------------------------
+ geolocation__latitude__s  | double precision            |           |          | 
+ memo__c                   | character varying(255)      |           |          | 
+ geolocation__longitude__s | double precision            |           |          | 
+ name                      | character varying(80)       |           |          | 
+ timestamp__c              | character varying(40)       |           |          | 
+ address__c                | character varying(200)      |           |          | 
+ isdeleted                 | boolean                     |           |          | 
+ systemmodstamp            | timestamp without time zone |           |          | 
+ createddate               | timestamp without time zone |           |          | 
+ sfid                      | character varying(18)       | ucs_basic |          | 
+ id                        | integer                     |           | not null | nextval('record__c_id_seq'::regclass)
+ _hc_lastop                | character varying(32)       |           |          | 
+ _hc_err                   | text                        |           |          | 
 Indexes:
-    "photo_pkey" PRIMARY KEY, btree (record_id)
+    "record__c_pkey" PRIMARY KEY, btree (id)
+    "hc_idx_record__c_systemmodstamp" btree (systemmodstamp)
+    "hcu_idx_record__c_sfid" UNIQUE, btree (sfid)
+    "hcu_idx_record__c_timestamp__c" UNIQUE, btree (timestamp__c)
+Referenced by:
+    TABLE "photo" CONSTRAINT "photo_timestamp_fkey" FOREIGN KEY ("timestamp") REFERENCES record__c(timestamp__c) ON DELETE CASCADE
+Triggers:
+    hc_record__c_logtrigger AFTER INSERT OR DELETE OR UPDATE ON record__c FOR EACH ROW WHEN (public.get_xmlbinary()::text = 'base64'::text) EXECUTE FUNCTION hc_record__c_logger()
+    hc_record__c_status_trigger BEFORE INSERT OR UPDATE ON record__c FOR EACH ROW EXECUTE FUNCTION hc_record__c_status()
+
+DATABASE=> \d photo;
+                         Table "salesforce.photo"
+     Column      |         Type          | Collation | Nullable | Default 
+-----------------+-----------------------+-----------+----------+---------
+ image           | bytea                 |           |          | 
+ thumbnail       | bytea                 |           |          | 
+ equirectangular | boolean               |           |          | 
+ timestamp       | character varying(40) |           | not null | 
+Indexes:
+    "photo_pkey" PRIMARY KEY, btree ("timestamp")
 Foreign-key constraints:
-    "photo_record_fkey" FOREIGN KEY (record_id) REFERENCES record(id) ON DELETE CASCADE
+    "photo_timestamp_fkey" FOREIGN KEY ("timestamp") REFERENCES record__c(timestamp__c) ON DELETE CASCADE
+
 ```
 
 ## Tips
