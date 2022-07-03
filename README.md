@@ -38,31 +38,15 @@ ARAOBP_MYPHOTOS_PASSWORD_DEFAULT
 ```
 DATABASE=> set search_path to salesforce;                                                                                                     SET
 
-DATABASE=> \d
-                       List of relations
-   Schema   |         Name         |   Type   |     Owner      
-------------+----------------------+----------+----------------
- salesforce | _hcmeta              | table    | bpkutsjczkjxhz
- salesforce | _hcmeta_id_seq       | sequence | bpkutsjczkjxhz
- salesforce | _sf_event_log        | table    | bpkutsjczkjxhz
- salesforce | _sf_event_log_id_seq | sequence | bpkutsjczkjxhz
- salesforce | _trigger_log         | table    | bpkutsjczkjxhz
- salesforce | _trigger_log_archive | table    | bpkutsjczkjxhz
- salesforce | _trigger_log_id_seq  | sequence | bpkutsjczkjxhz
- salesforce | photo                | table    | bpkutsjczkjxhz
- salesforce | record__c            | table    | bpkutsjczkjxhz
- salesforce | record__c_id_seq     | sequence | bpkutsjczkjxhz
-(10 rows)
-
-DATABASE=> \d record__c;
+DATABASE=> \d record__c
                                               Table "salesforce.record__c"
           Column           |            Type             | Collation | Nullable |                Default                
 ---------------------------+-----------------------------+-----------+----------+---------------------------------------
  geolocation__latitude__s  | double precision            |           |          | 
- memo__c                   | character varying(255)      |           |          | 
+ uuid__c                   | character varying(32)       |           |          | 
  geolocation__longitude__s | double precision            |           |          | 
  name                      | character varying(80)       |           |          | 
- timestamp__c              | character varying(40)       |           |          | 
+ timestamp__c              | timestamp without time zone |           |          | 
  address__c                | character varying(200)      |           |          | 
  isdeleted                 | boolean                     |           |          | 
  systemmodstamp            | timestamp without time zone |           |          | 
@@ -71,30 +55,29 @@ DATABASE=> \d record__c;
  id                        | integer                     |           | not null | nextval('record__c_id_seq'::regclass)
  _hc_lastop                | character varying(32)       |           |          | 
  _hc_err                   | text                        |           |          | 
- record_id__c              | double precision            |           |          | 
 Indexes:
     "record__c_pkey" PRIMARY KEY, btree (id)
     "hc_idx_record__c_systemmodstamp" btree (systemmodstamp)
     "hcu_idx_record__c_sfid" UNIQUE, btree (sfid)
-    "hcu_idx_record__c_timestamp__c" UNIQUE, btree (timestamp__c)
+    "hcu_idx_record__c_uuid__c" UNIQUE, btree (uuid__c)
 Referenced by:
-    TABLE "photo" CONSTRAINT "photo_record_fkey" FOREIGN KEY (record_id) REFERENCES record__c(id) ON DELETE CASCADE
+    TABLE "photo" CONSTRAINT "photo_uuid_fkey" FOREIGN KEY (uuid) REFERENCES record__c(uuid__c) ON DELETE CASCADE
 Triggers:
     hc_record__c_logtrigger AFTER INSERT OR DELETE OR UPDATE ON record__c FOR EACH ROW WHEN (public.get_xmlbinary()::text = 'base64'::text) EXECUTE FUNCTION hc_record__c_logger()
-    hc_record__c_status_trigger BEFORE INSERT OR UPDATE ON record__c FOR EACH ROW EXECUTE FUNCTION hc_record__c_status()
-
-DATABASE=> \d photo;
-                  Table "salesforce.photo"
-     Column      |  Type   | Collation | Nullable | Default 
------------------+---------+-----------+----------+---------
- image           | bytea   |           |          | 
- thumbnail       | bytea   |           |          | 
- equirectangular | boolean |           |          | 
- record_id       | integer |           | not null | 
+    hc_record__c_status_trigger BEFORE INSERT OR UPDATE ON record__c FOR EACH ROW EXECUTE FU
+    
+DATABASE=> \d photo
+                         Table "salesforce.photo"
+     Column      |         Type          | Collation | Nullable | Default 
+-----------------+-----------------------+-----------+----------+---------
+ uuid            | character varying(32) |           | not null | 
+ image           | bytea                 |           |          | 
+ thumbnail       | bytea                 |           |          | 
+ equirectangular | boolean               |           |          | 
 Indexes:
-    "photo_pkey" PRIMARY KEY, btree (record_id)
+    "photo_pkey" PRIMARY KEY, btree (uuid)
 Foreign-key constraints:
-    "photo_record_fkey" FOREIGN KEY (record_id) REFERENCES record__c(id) ON DELETE CASCADE
+    "photo_uuid_fkey" FOREIGN KEY (uuid) REFERENCES record__c(uuid__c) ON DELETE CASCADE
 ```
 
 ## Tips
