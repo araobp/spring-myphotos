@@ -82,11 +82,9 @@ Foreign-key constraints:
 
 ## Tips
 
-### PostgreSQL table initialization
-```
-=> DELETE FROM record;
-=> SELECT setval('record_id_seq', 1, false);
-```
+### How to add "on delete cascade" constraints?
+
+https://stackoverflow.com/questions/10356484/how-to-add-on-delete-cascade-constraints
 
 ### Resizing image preserving EXIF orientation by Thumnailator
 
