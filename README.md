@@ -71,30 +71,30 @@ DATABASE=> \d record__c;
  id                        | integer                     |           | not null | nextval('record__c_id_seq'::regclass)
  _hc_lastop                | character varying(32)       |           |          | 
  _hc_err                   | text                        |           |          | 
+ record_id__c              | double precision            |           |          | 
 Indexes:
     "record__c_pkey" PRIMARY KEY, btree (id)
     "hc_idx_record__c_systemmodstamp" btree (systemmodstamp)
     "hcu_idx_record__c_sfid" UNIQUE, btree (sfid)
     "hcu_idx_record__c_timestamp__c" UNIQUE, btree (timestamp__c)
 Referenced by:
-    TABLE "photo" CONSTRAINT "photo_timestamp_fkey" FOREIGN KEY ("timestamp") REFERENCES record__c(timestamp__c) ON DELETE CASCADE
+    TABLE "photo" CONSTRAINT "photo_record_fkey" FOREIGN KEY (record_id) REFERENCES record__c(id) ON DELETE CASCADE
 Triggers:
     hc_record__c_logtrigger AFTER INSERT OR DELETE OR UPDATE ON record__c FOR EACH ROW WHEN (public.get_xmlbinary()::text = 'base64'::text) EXECUTE FUNCTION hc_record__c_logger()
     hc_record__c_status_trigger BEFORE INSERT OR UPDATE ON record__c FOR EACH ROW EXECUTE FUNCTION hc_record__c_status()
 
 DATABASE=> \d photo;
-                         Table "salesforce.photo"
-     Column      |         Type          | Collation | Nullable | Default 
------------------+-----------------------+-----------+----------+---------
- image           | bytea                 |           |          | 
- thumbnail       | bytea                 |           |          | 
- equirectangular | boolean               |           |          | 
- timestamp       | character varying(40) |           | not null | 
+                  Table "salesforce.photo"
+     Column      |  Type   | Collation | Nullable | Default 
+-----------------+---------+-----------+----------+---------
+ image           | bytea   |           |          | 
+ thumbnail       | bytea   |           |          | 
+ equirectangular | boolean |           |          | 
+ record_id       | integer |           | not null | 
 Indexes:
-    "photo_pkey" PRIMARY KEY, btree ("timestamp")
+    "photo_pkey" PRIMARY KEY, btree (record_id)
 Foreign-key constraints:
-    "photo_timestamp_fkey" FOREIGN KEY ("timestamp") REFERENCES record__c(timestamp__c) ON DELETE CASCADE
-
+    "photo_record_fkey" FOREIGN KEY (record_id) REFERENCES record__c(id) ON DELETE CASCADE
 ```
 
 ## Tips
