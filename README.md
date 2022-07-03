@@ -36,7 +36,9 @@ ARAOBP_MYPHOTOS_PASSWORD_DEFAULT
 ## Data model definitions
 
 [Step1] Create "record__c" custom by using Object Manager on Salesforce Platform.
+
 [Step2] Add Heroku-Connect plugin on Heroku, then add a mapping of fields.
+
 [Step3] Define "photo" table on PostgreSQL by using psql.
 
 ```
