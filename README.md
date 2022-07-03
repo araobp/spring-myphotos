@@ -33,7 +33,11 @@ ARAOBP_MYPHOTOS_USERNAME_DEFAULT
 ARAOBP_MYPHOTOS_PASSWORD_DEFAULT
 ```
 
-## psql output
+## Data model definitions
+
+[Step1] Create "record__c" custom by using Object Manager on Salesforce Platform.
+[Step2] Add Heroku-Connect plugin on Heroku, then add a mapping of fields.
+[Step3] Define "photo" table on PostgreSQL by using psql.
 
 ```
 DATABASE=> set search_path to salesforce;                                                                                                     SET
