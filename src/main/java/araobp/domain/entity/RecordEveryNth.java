@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 public class RecordEveryNth {
 
 	@Id
-	private Integer id;
+	private String uuid;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	private Timestamp timestamp;
-	private String place;
+	private Timestamp timestamp__c;
+	private String name;
 	private Double distance;
 }

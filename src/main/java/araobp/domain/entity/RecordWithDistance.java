@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
 public class RecordWithDistance {
 
 	@Id
-	private Integer id;
+	private String uuid;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	private Timestamp timestamp;
-	private String place;
-	private String memo;
-	private Double latitude;
-	private Double longitude;
-	private String address;
+	private Timestamp timestamp__c;
+	private String name;
+	private String memo__c;
+	private Double geolocation__latitude__s;
+	private Double geolocation__longitude__s;
+	private String address__c;
 	private Double distance;
 }

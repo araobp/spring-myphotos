@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import araobp.domain.service.RecordAndPhotoService;
-import araobp.domain.entity.Record;
+import araobp.domain.entity.Record__c;
 
 @Controller
 public class MyPhotosController {

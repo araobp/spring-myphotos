@@ -3,16 +3,16 @@ package araobp.domain.service;
 import java.util.Optional;
 
 import araobp.domain.entity.Count;
-import araobp.domain.entity.Id;
 import araobp.domain.entity.PhotoAttribute;
-import araobp.domain.entity.Record;
+import araobp.domain.entity.Record__c;
+import araobp.domain.entity.Uuid;
 import araobp.domain.entity.RecordEveryNth;
 import araobp.domain.entity.RecordWithDistance;
 
 public interface RecordAndPhotoService {
 	
-	Boolean checkIfIdExists(Integer id);
-	
+	Boolean checkIfUUIDExists(String uuid);
+		
 	Iterable<RecordWithDistance> selectRecords(Integer limit, Integer offset);
 	
 	Iterable<RecordEveryNth> selectRecordsEveryNth(Integer limit);
@@ -21,25 +21,25 @@ public interface RecordAndPhotoService {
 	
 	Iterable<RecordEveryNth> selectRecordsEveryNthClosestOrder(Double latitude, Double longitude, Integer limit);
 	
-	Optional<Record> selectRecordById(Integer id);
+	Optional<Record__c> selectRecordByUUID(String uuid);
 	
-	Id insertRecord(Record record);
+	Uuid insertRecord(Record__c record);
 	
-	Boolean updateRecord(Integer id, String place, String memo);
+	Boolean updateRecord(String uuid, String place, String memo);
 	
-	void deleteRecordAndImageById(Integer id);
+	Boolean deleteRecordAndImageByUUID(String uuid);
 	
-	byte[] selectThumbnailById(Integer id);
+	byte[] selectThumbnailByUUID(String id);
 
-	byte[] selectImageById(Integer id);
+	byte[] selectImageByUUID(String uuid);
 	
-	PhotoAttribute selectPhotoAttributeById(Integer id);
+	PhotoAttribute selectPhotoAttributeByUUID(String uuid);
 	
-	Boolean insertImage(Integer id, byte[] bytes);
+	Boolean insertImage(String uuid, byte[] bytes);
 	
-	Optional<Id> selectHeadId();
+	Optional<Uuid> selectHeadUUID();
 	
-	Optional<Id> selectTailId();
+	Optional<Uuid> selectTailUUID();
 	
 	Count count();
 

@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Id {
-	Integer id;
+public class Uuid {
+	String uuid;
 }

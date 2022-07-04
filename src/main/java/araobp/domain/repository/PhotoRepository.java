@@ -11,22 +11,22 @@ import araobp.domain.entity.Photo;
 
 public interface PhotoRepository extends CrudRepository<Photo, Integer> {
 
-	@Query("SELECT thumbnail FROM photo WHERE record_id = :id")
-	public Optional<Photo> selectThumbnailById(@Param("id") Integer id);
+	@Query("SELECT thumbnail FROM photo WHERE uuid = :uuid")
+	public Optional<Photo> selectThumbnailByUUID(@Param("uuid") String uuid);
 
-	@Query("SELECT image FROM photo WHERE record_id = :id")
-	public Optional<Photo> selectImageById(@Param("id") Integer id);
+	@Query("SELECT image FROM photo WHERE uuid = :uuid")
+	public Optional<Photo> selectImageByUUID(@Param("uuid") String uuid);
 
 	@Modifying
-	@Query("INSERT INTO photo (record_id, image, thumbnail, equirectangular) VALUES (:id, :image, :thumbnail, :equirectangular)")
+	@Query("INSERT INTO photo (uuid, image, thumbnail, equirectangular) VALUES (:uuid, :image, :thumbnail, :equirectangular)")
 	public Integer insertImageAndThumbnail(
-			@Param("id") Integer id,
+			@Param("uuid") String uuid,
 			@Param("image") byte[] image,
 			@Param("thumbnail") byte[] thumbnail,
 			@Param("equirectangular") boolean equirectangular
 			);
 	
-	@Query("SELECT equirectangular FROM photo WHERE record_id = :id")
-	public Optional<Photo> selectAttributeById(@Param("id") Integer id);
+	@Query("SELECT equirectangular FROM photo WHERE uuid = :uuid")
+	public Optional<Photo> selectAttributeByUUID(@Param("uuid") String uuid);
 
 }

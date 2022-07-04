@@ -18,13 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import araobp.domain.entity.Count;
-import araobp.domain.entity.GpsLog;
-import araobp.domain.entity.Id;
 import araobp.domain.entity.PhotoAttribute;
-import araobp.domain.entity.Record;
+import araobp.domain.entity.Record__c;
+import araobp.domain.entity.Uuid;
 import araobp.domain.entity.RecordEveryNth;
 import araobp.domain.entity.RecordWithDistance;
-import araobp.domain.service.GpsLogService;
 import araobp.domain.service.RecordAndPhotoService;
 
 @RestController
@@ -39,24 +37,21 @@ public class MyPhotosRestController {
 	
 	@Autowired
 	RecordAndPhotoService recordAndPhotoService;
-	
-	@Autowired
-	GpsLogService gpsLogService;
-	
+		
 	@PostMapping("/record")
-	public Id postRecord(@RequestBody Record record) {
+	public Uuid postRecord(@RequestBody Record__c record) {
 		return recordAndPhotoService.insertRecord(record);
 	}
 	
-	@PatchMapping("/record/{id}")
-	public void patchRecord(@PathVariable Integer id, @RequestBody Record record) {
-		Boolean success = recordAndPhotoService.updateRecord(id, record.getPlace(), record.getMemo());
+	@PatchMapping("/record/{uuid}")
+	public void patchRecord(@PathVariable String uuid, @RequestBody Record__c record) {
+		Boolean success = recordAndPhotoService.updateRecord(uuid, record.getName(), record.getMemo__c());
 		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 	}
 	
-	@DeleteMapping("/record/{id}")
-	public void deleteRecord(@PathVariable Integer id) {
-		recordAndPhotoService.deleteRecordAndImageById(id);
+	@DeleteMapping("/record/{uuid}")
+	public void deleteRecord(@PathVariable String uuid) {
+		recordAndPhotoService.deleteRecordAndImageByUUID(uuid);
 	}
 	
 	@GetMapping("/record")
@@ -70,62 +65,46 @@ public class MyPhotosRestController {
 		return records;
 	}
 		
-	@GetMapping("/record/{id}")
-	public Optional<Record> getRecord(@PathVariable Integer id) {
-		Optional<Record> record = recordAndPhotoService.selectRecordById(id);
+	@GetMapping("/record/{uuid}")
+	public Optional<Record__c> getRecord(@PathVariable String uuid) {
+		Optional<Record__c> record = recordAndPhotoService.selectRecordByUUID(uuid);
 		if (record.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		}
 		return record;
 	}
 	
-	@GetMapping("/photo/{id}/attribute")
-	public PhotoAttribute getPhotoAttribute(@PathVariable Integer id) {
-		PhotoAttribute attr = recordAndPhotoService.selectPhotoAttributeById(id);
+	@GetMapping("/photo/{uuid}/attribute")
+	public PhotoAttribute getPhotoAttribute(@PathVariable String uuid) {
+		PhotoAttribute attr = recordAndPhotoService.selectPhotoAttributeByUUID(uuid);
 		if (attr == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		}
 		return attr;
 	}
 
-	@GetMapping(value = "/photo/{id}/thumbnail", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public byte[] getThumbnail(@PathVariable Integer id) throws ResponseStatusException {
-		byte[] thumbnail = recordAndPhotoService.selectThumbnailById(id);
+	@GetMapping(value = "/photo/{uuid}/thumbnail", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public byte[] getThumbnail(@PathVariable String uuid) throws ResponseStatusException {
+		byte[] thumbnail = recordAndPhotoService.selectThumbnailByUUID(uuid);
 		if (thumbnail == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		}
 		return thumbnail;
 	}
 
-	@GetMapping(value = "/photo/{id}/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public byte[] getImage(@PathVariable Integer id) throws ResponseStatusException {
-		byte[] image = recordAndPhotoService.selectImageById(id);
+	@GetMapping(value = "/photo/{uuid}/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public byte[] getImage(@PathVariable String uuid) throws ResponseStatusException {
+		byte[] image = recordAndPhotoService.selectImageByUUID(uuid);
 		if (image == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 		}
 		return image;
 	}
 	
-	@PostMapping("/photo/{id}")
-	public void postImage(@PathVariable Integer id, @RequestBody byte[] image) {
-	    Boolean success = recordAndPhotoService.insertImage(id, image);
+	@PostMapping("/photo/{uuid}")
+	public void postImage(@PathVariable String uuid, @RequestBody byte[] image) {
+	    Boolean success = recordAndPhotoService.insertImage(uuid, image);
 		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
-	}
-	
-	@PostMapping("/gpslog")
-	public Id postGpsLog(@RequestBody GpsLog gpsLog) {
-		return gpsLogService.insertGpsLog(gpsLog);
-	}
-		
-	@GetMapping("/gpslog")
-	public Iterable<GpsLog> getSession(@RequestParam Integer current, @RequestParam String direction) {
-		if (direction.equals(PREVIOUS)) {
-			return gpsLogService.getPreviousSession(current);
-		} else if (direction.equals(NEXT)){
-			return gpsLogService.getNextSession(current);			
-		} else {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Illegal direction");
-		}
 	}
 	
 	@GetMapping("/management/record/count")
@@ -142,10 +121,5 @@ public class MyPhotosRestController {
 			records = recordAndPhotoService.selectRecordsEveryNth(limit);
 		}
 		return records;
-	}
-
-	@GetMapping("/management/gpslog/count")
-	public Count gpsLogCount() throws ResponseStatusException {
-		return gpsLogService.countSessions();
 	}
 }

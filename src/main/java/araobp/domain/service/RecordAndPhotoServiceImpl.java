@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.StreamSupport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,10 +29,10 @@ import com.drew.metadata.jpeg.JpegDirectory;
 import com.drew.metadata.xmp.XmpDirectory;
 
 import araobp.domain.entity.Count;
-import araobp.domain.entity.Id;
 import araobp.domain.entity.Photo;
 import araobp.domain.entity.PhotoAttribute;
-import araobp.domain.entity.Record;
+import araobp.domain.entity.Record__c;
+import araobp.domain.entity.Uuid;
 import araobp.domain.entity.RecordEveryNth;
 import araobp.domain.entity.RecordWithDistance;
 import araobp.domain.repository.PhotoRepository;
@@ -66,8 +67,8 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	Nominatim nominatim;
 
 	@Override
-	public Optional<Record> selectRecordById(Integer id) {
-		return recordRepository.findById(id);
+	public Optional<Record__c> selectRecordByUUID(String uuid) {
+		return recordRepository.getRecordByUUID(uuid);
 	}
 
 	@Override
@@ -93,44 +94,45 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	}
 
 	@Override
-	public Id insertRecord(Record record) {
-		record.setId(null);
+	public Uuid insertRecord(Record__c record) {
+		String uuid = UUID.randomUUID().toString();
+		record.setUuid_id__c(uuid);
 		Timestamp timestamp = Timestamp.from(Instant.now());
-		record.setTimestamp(timestamp);
-		Record r = recordRepository.save(record);
-		return new Id(r.getId());
+		record.setTimestamp__c(timestamp);
+		Record__c r = recordRepository.save(record);
+		return new Uuid(uuid);
 	}
 
 	@Override
-	public Boolean updateRecord(Integer id, String place, String memo) {
-		int affectedRows = recordRepository.updateRecord(id, place, memo);
-		return (affectedRows == 1) ? true : false;
+	public Boolean updateRecord(String uuid, String place, String memo) {
+		int affectedRows = recordRepository.updateRecord(uuid, place, memo);
+		return (affectedRows == 1);
 	}
 
 	@Override
-	public void deleteRecordAndImageById(Integer id) {
-		// Note: photo is also deleted by "ON DELETE CASCADE" setting on POSTGRES SQL
-		// photoRepository.deleteById(id);
-		recordRepository.deleteById(id);
+	public Boolean deleteRecordAndImageByUUID(String uuid) {
+		// Note: photo record will also be deleted by "ON DELETE CASCADE" setting.
+		int affectedRows = recordRepository.deleteRecord(uuid);
+		return (affectedRows == 1);
 	}
 
 	@Override
-	public byte[] selectThumbnailById(Integer id) {
-		Optional<Photo> photo = photoRepository.selectThumbnailById(id);
+	public byte[] selectThumbnailByUUID(String uuid) {
+		Optional<Photo> photo = photoRepository.selectThumbnailByUUID(uuid);
 		return photo.isPresent() ? photo.get().getThumbnail() : null;
 	}
 
 	@Override
-	public byte[] selectImageById(Integer id) {
-		Optional<Photo> photo = photoRepository.selectImageById(id);
+	public byte[] selectImageByUUID(String uuid) {
+		Optional<Photo> photo = photoRepository.selectImageByUUID(uuid);
 		return photo.isPresent() ? photo.get().getImage() : null;
 	}
 
 	@Override
-	public PhotoAttribute selectPhotoAttributeById(Integer id) {
+	public PhotoAttribute selectPhotoAttributeByUUID(String uuid) {
 		PhotoAttribute attr = null;
 		try {
-			Optional<Photo> photo = photoRepository.selectAttributeById(id);
+			Optional<Photo> photo = photoRepository.selectAttributeByUUID(uuid);
 			if (photo.isPresent()) {
 				attr = new PhotoAttribute();
 				attr.setEquirectangular(photo.get().isEquirectangular());
@@ -142,8 +144,8 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	}
 
 	@Override
-	public Boolean insertImage(Integer id, byte[] image) {
-		if (checkIfIdExists(id)) {
+	public Boolean insertImage(String uuid, byte[] image) {
+		if (checkIfUUIDExists(uuid)) {
 			InputStream inputStream = new ByteArrayInputStream(image);
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
@@ -179,9 +181,9 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 					Double latitude = geoLocation.getLatitude();
 					Double longitude = geoLocation.getLongitude();
 					if (latitude != null && latitude != 0.0 && longitude != null && longitude != 0.0) {
-						recordRepository.updateLatLon(id, latitude, longitude);
+						recordRepository.updateLatLon(uuid, latitude, longitude);
 						address = nominatim.getAddress(latitude, longitude);
-						recordRepository.updateAddress(id, address);
+						recordRepository.updateAddress(uuid, address);
 					}
 				}
 
@@ -195,7 +197,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 																				// into
 																				// account
 						Timestamp timestamp = Timestamp.from(instant);
-						recordRepository.updateTimestamp(id, timestamp);
+						recordRepository.updateTimestamp(uuid, timestamp);
 					}
 				}
 
@@ -207,8 +209,8 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 
 				// Insert the image data to photo table
 				byte[] thumbnail = outputStream.toByteArray();
-				Integer affectedRows = photoRepository.insertImageAndThumbnail(id, image, thumbnail, equirectangular);
-
+				Integer affectedRows = photoRepository.insertImageAndThumbnail(uuid, image, thumbnail, equirectangular);
+				
 				return (affectedRows == 1) ? true : false;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -220,33 +222,33 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	}
 
 	@Override
-	public Boolean checkIfIdExists(Integer id) {
-		Iterable<Record> records = recordRepository.checkIfIdExists(id);
+	public Boolean checkIfUUIDExists(String uuid) {
+		Iterable<Record__c> records = recordRepository.checkIfUUIDExists(uuid);
 		// logger.info(records);
 		Long count = StreamSupport.stream(records.spliterator(), false).count();
 		return (count == 1) ? true : false;
 	}
 
 	@Override
-	public Optional<Id> selectHeadId() {
-		Optional<Record> record = recordRepository.getHeadId();
-		Id id = null;
+	public Optional<Uuid> selectHeadUUID() {
+		Optional<Record__c> record = recordRepository.getHeadUUID();
+		Uuid uuid = null;
 		if (record.isPresent()) {
-			id = new Id();
-			id.setId(record.get().getId());
+			uuid = new Uuid();
+			uuid.setUuid(record.get().getUuid());
 		}
-		return Optional.ofNullable(id);
+		return Optional.ofNullable(uuid);
 	}
 
 	@Override
-	public Optional<Id> selectTailId() {
-		Optional<Record> record = recordRepository.getTailId();
-		Id id = null;
+	public Optional<Uuid> selectTailUUID() {
+		Optional<Record__c> record = recordRepository.getTailUUID();
+		Uuid uuid = null;
 		if (record.isPresent()) {
-			id = new Id();
-			id.setId(record.get().getId());
+			uuid = new Uuid();
+			uuid.setUuid(record.get().getUuid());
 		}
-		return Optional.ofNullable(id);
+		return Optional.ofNullable(uuid);
 	}
 
 	@Override
