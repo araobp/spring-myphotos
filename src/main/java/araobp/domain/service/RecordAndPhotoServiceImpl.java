@@ -96,10 +96,10 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	@Override
 	public Uuid insertRecord(Record__c record) {
 		String uuid = UUID.randomUUID().toString();
-		record.setUuid_id__c(uuid);
+		record.setUuid__c(uuid);
 		Timestamp timestamp = Timestamp.from(Instant.now());
 		record.setTimestamp__c(timestamp);
-		Record__c r = recordRepository.save(record);
+		recordRepository.save(record);
 		return new Uuid(uuid);
 	}
 
@@ -235,7 +235,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 		Uuid uuid = null;
 		if (record.isPresent()) {
 			uuid = new Uuid();
-			uuid.setUuid(record.get().getUuid());
+			uuid.setUuid(record.get().getUuid__c());
 		}
 		return Optional.ofNullable(uuid);
 	}
@@ -246,7 +246,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 		Uuid uuid = null;
 		if (record.isPresent()) {
 			uuid = new Uuid();
-			uuid.setUuid(record.get().getUuid());
+			uuid.setUuid(record.get().getUuid__c());
 		}
 		return Optional.ofNullable(uuid);
 	}

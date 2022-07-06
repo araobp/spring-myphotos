@@ -14,10 +14,10 @@ import araobp.domain.entity.RecordWithDistance;
 
 public interface RecordRepository extends CrudRepository<Record__c, Integer> {
 
-	@Query("SELECT uuid FROM record__c WHERE uuid = :uuid")
+	@Query("SELECT uuid__c FROM record__c WHERE uuid__c = :uuid")
 	public Iterable<Record__c> checkIfUUIDExists(@Param("uuid") String uuid);
 	
-	@Query("SELECT * FROM record__c WHERE uuid = :uuid")
+	@Query("SELECT * FROM record__c WHERE uuid__c = :uuid")
 	public Optional<Record__c> getRecordByUUID(@Param("uuid") String uuid);
 	
 	@Query("SELECT * FROM record__c ORDER BY timestamp__c DESC LIMIT :limit OFFSET :offset")
@@ -34,32 +34,32 @@ public interface RecordRepository extends CrudRepository<Record__c, Integer> {
 	
 	// [Reference] https://www.baeldung.com/spring-data-jpa-modifying-annotation
 	@Modifying
-	@Query("UPDATE record__c SET name = :place, memo__c = :memo WHERE uuid = :uuid")
+	@Query("UPDATE record__c SET name = :place, memo__c = :memo WHERE uuid__c = :uuid")
 	public Integer updateRecord(@Param("uuid") String uuid, @Param("place") String place, @Param("memo") String memo);
 
 	@Modifying
-	@Query("UPDATE record__c SET timestamp__c = :timestamp WHERE uuid = :uuid")
+	@Query("UPDATE record__c SET timestamp__c = :timestamp WHERE uuid__c = :uuid")
 	public Integer updateTimestamp(@Param("uuid") String uuid, @Param("timestamp") Timestamp timestamp);
 	
 	@Modifying
-	@Query("UPDATE record__c SET address__c = :address WHERE uuid = :uuid")
+	@Query("UPDATE record__c SET address__c = :address WHERE uuid__c = :uuid")
 	public Integer updateAddress(@Param("uuid") String uuid, @Param("address") String address);
 
 	@Modifying
-	@Query("UPDATE record__c SET geolocation__latitude__s = :latitude, geolocation__longitude__s = :longitude WHERE uuid = :uuid")
+	@Query("UPDATE record__c SET geolocation__latitude__s = :latitude, geolocation__longitude__s = :longitude WHERE uuid__c = :uuid")
 	public Integer updateLatLon(@Param("uuid") String uuid, @Param("latitude") double latitude, @Param("longitude") double longitude);
 	
 	@Modifying
-	@Query("DELETE FROM record__c WHERE UUID = :uuid")
+	@Query("DELETE FROM record__c WHERE uuid__c = :uuid")
 	public Integer deleteRecord(@Param("uuid") String uuid);
 	
-	@Query("SELECT uuid FROM record__c ORDER BY id LIMIT 1")
+	@Query("SELECT uuid__c FROM record__c ORDER BY id LIMIT 1")
 	public Optional<Record__c> getHeadUUID();
 
-	@Query("SELECT uuid FROM record__c ORDER BY id DESC LIMIT 1")
+	@Query("SELECT uuid__c FROM record__c ORDER BY id DESC LIMIT 1")
 	public Optional<Record__c> getTailUUID();
 	
-	@Query("SELECT COUNT(uuid) FROM record__c")
+	@Query("SELECT COUNT(uuid__c) FROM record__c")
 	public long count();	
 	
 }
