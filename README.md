@@ -49,7 +49,7 @@ DATABASE=> \d record__c
           Column           |            Type             | Collation | Nullable |                Default                
 ---------------------------+-----------------------------+-----------+----------+---------------------------------------
  geolocation__latitude__s  | double precision            |           |          | 
- uuid__c                   | character varying(32)       |           |          | 
+ uuid__c                   | character varying(36)       |           |          | 
  geolocation__longitude__s | double precision            |           |          | 
  name                      | character varying(80)       |           |          | 
  timestamp__c              | timestamp without time zone |           |          | 
@@ -76,7 +76,7 @@ DATABASE=> \d photo
                          Table "salesforce.photo"
      Column      |         Type          | Collation | Nullable | Default 
 -----------------+-----------------------+-----------+----------+---------
- uuid            | character varying(32) |           | not null | 
+ uuid            | character varying(36) |           | not null | 
  image           | bytea                 |           |          | 
  thumbnail       | bytea                 |           |          | 
  equirectangular | boolean               |           |          | 
