@@ -39,8 +39,8 @@ public class MyPhotosRestController {
 	RecordAndPhotoService recordAndPhotoService;
 		
 	@PostMapping("/record")
-	public Uuid postRecord(@RequestBody Record__c record) {
-		return recordAndPhotoService.insertRecord(record);
+	public Uuid postRecord(@RequestBody Record__c record, @RequestParam Integer timezone ) {
+		return recordAndPhotoService.insertRecord(record, timezone);
 	}
 	
 	@PatchMapping("/record/{uuid}")
@@ -102,8 +102,8 @@ public class MyPhotosRestController {
 	}
 	
 	@PostMapping("/photo/{uuid}")
-	public void postImage(@PathVariable String uuid, @RequestBody byte[] image) {
-	    Boolean success = recordAndPhotoService.insertImage(uuid, image);
+	public void postImage(@PathVariable String uuid, @RequestBody byte[] image, @RequestParam Integer timezone) {
+	    Boolean success = recordAndPhotoService.insertImage(uuid, image, timezone);
 		if (!success) throw new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND_REASON);
 	}
 	

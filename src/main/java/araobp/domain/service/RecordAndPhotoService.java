@@ -23,7 +23,7 @@ public interface RecordAndPhotoService {
 	
 	Optional<Record__c> selectRecordByUUID(String uuid);
 	
-	Uuid insertRecord(Record__c record);
+	Uuid insertRecord(Record__c record, Integer timezone);
 	
 	Boolean updateRecord(String uuid, String place, String memo);
 	
@@ -35,7 +35,7 @@ public interface RecordAndPhotoService {
 	
 	PhotoAttribute selectPhotoAttributeByUUID(String uuid);
 	
-	Boolean insertImage(String uuid, byte[] bytes);
+	Boolean insertImage(String uuid, byte[] bytes, Integer timezone);
 	
 	Optional<Uuid> selectHeadUUID();
 	

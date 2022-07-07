@@ -48,15 +48,6 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 
 	static final Integer THUMBNAIL_TARGET_WIDTH = 128;
 
-	static final Integer UTC_OFFSET = getUtcOffset();
-
-	static Integer getUtcOffset() {
-		String utcOffset = System.getenv().get("UTC_OFFSET");
-		if (utcOffset == null)
-			utcOffset = "9";
-		return Integer.parseInt(utcOffset);
-	}
-
 	@Autowired
 	RecordRepository recordRepository;
 
@@ -94,10 +85,12 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	}
 
 	@Override
-	public Uuid insertRecord(Record__c record) {
+	public Uuid insertRecord(Record__c record, Integer timezone) {
 		String uuid = UUID.randomUUID().toString();
 		record.setUuid__c(uuid);
-		Timestamp timestamp = Timestamp.from(Instant.now());
+		Instant instant = Instant.now();
+		instant = instant.plus(timezone, ChronoUnit.HOURS); 
+		Timestamp timestamp = Timestamp.from(instant);
 		record.setTimestamp__c(timestamp);
 		recordRepository.save(record);
 		return new Uuid(uuid);
@@ -144,7 +137,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 	}
 
 	@Override
-	public Boolean insertImage(String uuid, byte[] image) {
+	public Boolean insertImage(String uuid, byte[] image, Integer timezone) {
 		if (checkIfUUIDExists(uuid)) {
 			InputStream inputStream = new ByteArrayInputStream(image);
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -193,7 +186,7 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 					Date date = exifSubIfdDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
 					if (date != null) {
 						Instant instant = date.toInstant();
-						instant = instant.minus(UTC_OFFSET, ChronoUnit.HOURS); // EXIF datetime does not take time zone
+						instant = instant.plus(timezone, ChronoUnit.HOURS); // EXIF datetime does not take time zone
 																				// into
 																				// account
 						Timestamp timestamp = Timestamp.from(instant);
