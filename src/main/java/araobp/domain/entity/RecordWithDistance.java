@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class RecordWithDistance {
 
 	@Id
-	private String uuid;
+	private String uuid__c;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private Timestamp timestamp__c;
 	private String name;

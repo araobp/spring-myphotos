@@ -98,6 +98,8 @@ public class RecordAndPhotoServiceImpl implements RecordAndPhotoService {
 
 	@Override
 	public Boolean updateRecord(String uuid, String place, String memo) {
+		System.out.println(place);
+		System.out.println(memo);
 		int affectedRows = recordRepository.updateRecord(uuid, place, memo);
 		return (affectedRows == 1);
 	}

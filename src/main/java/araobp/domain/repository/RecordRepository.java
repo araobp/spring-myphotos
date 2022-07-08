@@ -26,7 +26,7 @@ public interface RecordRepository extends CrudRepository<Record__c, Integer> {
 	@Query("SELECT *, ( 6371 * ACOS( COS( RADIANS( :latitude ) ) * COS( RADIANS( geolocation__latitude__s ) ) * COS( RADIANS( geolocation__longitude__s ) - RADIANS( :longitude) ) + SIN( RADIANS( :latitude ) ) * SIN( RADIANS( geolocation__latitude__s ) ) ) ) AS distance FROM record__c ORDER BY distance LIMIT :limit OFFSET :offset")
 	public Iterable<RecordWithDistance> getRecordsClosestOrder(@Param("latitude") Double latitude, @Param("longitude") Double longitude, @Param("limit") Integer limit, @Param("offset") Integer offset);
 	
-	@Query("SELECT * FROM (SELECT id, timestamp__c, name, row_number() OVER (ORDER BY timestamp__c DESC) AS ROW FROM record__c) t WHERE t.row % :limit = 1")
+	@Query("SELECT * FROM (SELECT uuid__c, timestamp__c, name, row_number() OVER (ORDER BY timestamp__c DESC) AS ROW FROM record__c) t WHERE t.row % :limit = 1")
 	public Iterable<RecordEveryNth> getRecordsEveryNth(@Param("limit") Integer limit);
 	
 	@Query("SELECT * FROM ( SELECT *, row_number() OVER (ORDER BY distance) AS row FROM ( SELECT  *, ( 6371 * ACOS( COS( RADIANS( :latitude ) ) * COS( RADIANS( geolocation__latitude__s ) ) * COS( RADIANS( geolocation__longitude__s ) - RADIANS( :longitude ) ) + SIN( RADIANS( :latitude) ) * SIN( RADIANS( geolocation__latitude__s ) ) ) ) AS distance FROM record__c ) withDistance ) withRow WHERE row % :limit = 1")
